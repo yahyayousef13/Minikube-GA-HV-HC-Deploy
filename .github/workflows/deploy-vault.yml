@@ -14,7 +14,8 @@ jobs:
       JFROG_REPO: "vault-repo"
       IMAGE_NAME: "vault-server"
       BASE_VERSION: "1.0"
-      IMAGE_TAG: "${{ github.run_number }}-$(date +'%Y%m%d')"  # Append timestamp for better traceability    # Dynamically using GitHub's run number as versioning
+      #IMAGE_TAG: "${{ github.run_number }}-$(date +'%Y%m%d')"    # Dynamically using GitHub's run number as versioning
+      IMAGE_TAG: "${{ github.run_number }}-$(date +'%Y%m%d%H%M%S')" # Append timestamp for better traceability 
       K8S_NAMESPACE: "vault-deployment"
       K8S_DEPLOYMENT_NAME: "vault"
       JFROG_CREDENTIALS_ID: ${{ secrets.JFROG_CREDENTIALS_ID }}  # GitHub secrets for credentials
