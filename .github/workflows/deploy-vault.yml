@@ -51,13 +51,12 @@ jobs:
         set -e  # Stop script on first error
         
         docker build -t ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -f docker/Dockerfile .
+        docker images
       continue-on-error: false  # Ensure build errors stop the workflow
       
     # Step 6: Push Docker Image to JFrog Artifactory
     - name: Push Docker Image to JFrog Artifactory
       run: |
-        docker login ${{ env.JFROG_REGISTRY }} -u ${{ secrets.JFROG_USERNAME }} -p ${{ secrets.JFROG_PASSWORD }}
-
         echo "Pushing Docker image to JFrog Artifactory..."
         docker push ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
@@ -70,38 +69,28 @@ jobs:
     # Step 8: Set up Helm
     #- name: Set up Helm
     #  uses: deliverybot/helm-action@v2
-    
-    # Step 8: Lint Helm Chart
+
+    # Step 9: Lint Helm Chart
     - name: Lint Helm Chart
       run: helm lint ./helm
 
-    # Step 9: Install Helm
+    # Step 10: Install Helm
     - name: Install Helm
       run: |
         echo "Installing Helm..."
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-    # Step 10: Log in to OpenShift
-    - name: Log in to OpenShift
-      run: |
-        echo "Logging in to OpenShift..."
-        echo ${{ secrets.OPENSHIFT_TOKEN }} | oc login --token=${{ secrets.OPENSHIFT_TOKEN }} --server=${{ secrets.OPENSHIFT_SERVER }}
-
-    # Step 11: Prepare Namespace
+    # Step 11: Prepare Namespace in Minikube
     - name: Create Namespace if Not Exists
       run: |
         echo "Preparing Kubernetes namespace..."
         kubectl get namespace ${{ env.K8S_NAMESPACE }} || kubectl create namespace ${{ env.K8S_NAMESPACE }}
 
-    # Step 12: Set up OpenShift Image Pull Secret for JFrog
-    - name: Set up Image Pull Secret for JFrog Artifactory
+    # Step 12: Set up Minikube Image Registry (Load Docker Image into Minikube)
+    - name: Load Image into Minikube
       run: |
-        echo "Creating image pull secret for JFrog Artifactory..."
-        oc create secret docker-registry jfrog-registry-secret \
-          --docker-username=${{ secrets.JFROG_USERNAME }} \
-          --docker-password=${{ secrets.JFROG_PASSWORD }} \
-          --docker-server=${{ env.JFROG_REGISTRY }}
-        oc secrets link default jfrog-registry-secret --for=pull
+        echo "Loading Docker image into Minikube..."
+        minikube image load ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
     # Step 13: Dry Run Helm Deployment
     - name: Helm Dry Run
@@ -114,7 +103,7 @@ jobs:
           --set server.ha.enabled=true \
           --dry-run
 
-    # Step 14: Install and Upgrade Vault using Helm in OpenShift
+    # Step 14: Install/Upgrade Vault using Helm in Minikube
     - name: Install/Upgrade Vault with Helm
       run: |
         echo "Deploying Vault using Helm..."
@@ -125,8 +114,8 @@ jobs:
           --set server.ha.enabled=true \
           --create-namespace
 
-    # Step 15: Detailed Health Check
-    - name: Detailed Health Check
+    # Step 15: Verify Deployment & Check Pod Status
+    - name: Check Deployment and Pod Status
       run: |
         echo "Checking deployment and pod health..."
         kubectl get all --namespace=${{ env.K8S_NAMESPACE }}
