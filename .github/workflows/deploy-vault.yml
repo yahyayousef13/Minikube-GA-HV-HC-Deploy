@@ -17,8 +17,8 @@ jobs:
       IMAGE_TAG: "${{ github.run_number }}-$(date +'%Y%m%d')"  # Append timestamp for better traceability    # Dynamically using GitHub's run number as versioning
       K8S_NAMESPACE: "vault-deployment"
       K8S_DEPLOYMENT_NAME: "vault"
-      #JFROG_CREDENTIALS_ID: ${{ secrets.JFROG_CREDENTIALS_ID }}  # GitHub secrets for credentials
-      #GITHUB_CREDENTIALS_ID: ${{ secrets.GITHUB_CREDENTIALS_ID }}  # GitHub secrets for credentials
+      JFROG_CREDENTIALS_ID: ${{ secrets.JFROG_CREDENTIALS_ID }}  # GitHub secrets for credentials
+      GITHUB_CREDENTIALS_ID: ${{ secrets.GITHUB_CREDENTIALS_ID }}  # GitHub secrets for credentials
 
     steps:
     # Step 1: Checkout the code from the repository
@@ -56,6 +56,8 @@ jobs:
     # Step 6: Push Docker Image to JFrog Artifactory
     - name: Push Docker Image to JFrog Artifactory
       run: |
+        docker login ${{ env.JFROG_REGISTRY }} -u ${{ secrets.JFROG_USERNAME }} -p ${{ secrets.JFROG_PASSWORD }}
+
         echo "Pushing Docker image to JFrog Artifactory..."
         docker push ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
