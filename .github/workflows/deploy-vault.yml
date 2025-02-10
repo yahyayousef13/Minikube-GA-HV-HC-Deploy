@@ -42,10 +42,14 @@ jobs:
         password: ${{ secrets.JFROG_PASSWORD }}
 
     # Step 5: Build Docker Image
+    - name: Debug File Existence
+      run: ls -l docker/
+
     - name: Build Docker Image
       run: |
         echo "Building Docker image..."
         set -e  # Stop script on first error
+        
         docker build -t ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -f docker/Dockerfile .
       continue-on-error: false  # Ensure build errors stop the workflow
       
