@@ -49,7 +49,11 @@ jobs:
 
     # Step 7: Log in to JFrog Artifactory
     - name: Log in to JFrog Artifactory
-      run: docker login ${{ env.JFROG_REGISTRY }} -u ${{ secrets.JFROG_USERNAME }} -p ${{ secrets.JFROG_PASSWORD }}
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.JFROG_REGISTRY }}
+        username: ${{ secrets.JFROG_USERNAME }}  # Get JFrog credentials from GitHub Secrets
+        password: ${{ secrets.JFROG_PASSWORD }}
 
     # Step 8: Build Docker Image
     - name: Build Docker Image
@@ -69,7 +73,7 @@ jobs:
       run: |
         echo "Pushing Docker image to JFrog Artifactory..."
         docker push ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-        
+
     # Step 10: Pull and Verify Docker Image
     - name: Pull and Verify Docker Image
       run: |
