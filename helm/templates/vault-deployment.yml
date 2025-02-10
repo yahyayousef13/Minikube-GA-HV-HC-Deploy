@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      containers:
+      - name: vault
+        image: trial4w4crx.jfrog.io/docker-vault-repo/vault-server:1.0.28
+        ports:
+        - containerPort: 8200
+        env:
+        - name: VAULT_ADDR
+          value: "https://127.0.0.1:8200"  # Use HTTPS for secure communication
+        volumeMounts:
+        - name: vault-config
+          mountPath: /etc/vault.d
+        - name: vault-ssl-cert
+          mountPath: /vault/certs  # Mount the SSL certificate and key
+      volumes:
+      - name: vault-config
+        configMap:
+          name: vault-config
+      - name: vault-ssl-cert
+        secret:
+          secretName: vault-ssl-cert  # Reference the secret containing SSL certs
+      imagePullSecrets:
+      - name: jfrog-registry-secret

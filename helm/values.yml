@@ -1,0 +1,13 @@
+replicaCount: 1
+
+image:
+  repository: trial4w4crx.jfrog.io/vault-repo/vault-server
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8200
+
+vault:
+  addr: "https://127.0.0.1:8200"
