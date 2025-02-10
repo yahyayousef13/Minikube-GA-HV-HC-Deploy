@@ -5,7 +5,7 @@ FROM hashicorp/vault:latest
 WORKDIR /vault
 
 # Copy Vault configuration file (Ensure you have config.hcl in your repo)
-COPY config.hcl /vault/config/config.hcl
+COPY docker/config.hcl /vault/config/config.hcl
 
 # Expose Vault's default API port
 EXPOSE 8200
