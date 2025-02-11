@@ -14,3 +14,9 @@ ui = true
 
 # Disable memory lock to allow running as a non-root user
 disable_mlock = true
+
+# Seal configuration (Shamir Secret Sharing)
+seal "shamir" {
+  secret_shares    = 3
+  secret_threshold = 2
+}
