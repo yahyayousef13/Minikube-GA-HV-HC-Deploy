@@ -16,3 +16,7 @@ data:
     }
     
     ui = true
+
+    monitoring - Grafana, Loki, prometheus
+    Scanning - Sonarcube , PRisma , checkmarx
+    SSL/TLS certificate - 
