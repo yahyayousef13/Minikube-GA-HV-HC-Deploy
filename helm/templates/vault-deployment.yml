@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: vault
-        image: trial4w4crx.jfrog.io/docker-vault-repo/vault-server:1.0.28
+        image: trial086vpt.jfrog.io/vault-repo/vault-server:24-20250213
         ports:
         - containerPort: 8200
         env:
