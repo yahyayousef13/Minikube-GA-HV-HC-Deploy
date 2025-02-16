@@ -7,7 +7,8 @@ on:
 
 jobs:
   build_and_deploy:
-    runs-on: ubuntu-latest  # Use an Ubuntu runner for the GitHub Actions workflow
+    #runs-on: ubuntu-latest  # Use an Ubuntu runner for the GitHub Actions workflow
+    runs-on: self-hosted  # Use self hosted runner for the GitHub Actions workflow    
 
     env:
       JFROG_REGISTRY: "trial086vpt.jfrog.io"
