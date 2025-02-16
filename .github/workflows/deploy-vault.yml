@@ -45,6 +45,25 @@ jobs:
           registry: ${{ env.JFROG_REGISTRY }}
           username: ${{ secrets.JFROG_USERNAME }}
           password: ${{ secrets.JFROG_PASSWORD }}
+      # Step 4: Generate Base64 Encoded JFrog Secret
+      - name: Generate Base64 JFrog Secret
+        run: |
+          echo -n '{"auths":{"${{ env.JFROG_REGISTRY }}":{"username":"${{ secrets.JFROG_USERNAME }}","password":"${{ secrets.JFROG_PASSWORD }}","email":"${{ secrets.JFROG_EMAIL }}","auth":"'$(echo -n "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" | base64)'"}}}' | base64 -w 0 > secret.txt
+
+      # Step 5: Create Kubernetes Secret Manifest
+      - name: Create JFrog Registry Secret
+        run: |
+          cat <<EOF > jfrog-secret.yaml
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: jfrog-registry-secret
+            namespace: ${{ env.K8S_NAMESPACE }}
+          type: kubernetes.io/dockerconfigjson
+          data:
+            .dockerconfigjson: "$(cat secret.txt)"
+          EOF
+
 
       # Step 5: Build Docker Image
       - name: Build Docker Image
@@ -107,6 +126,7 @@ jobs:
             --namespace ${{ env.K8S_NAMESPACE }} \
             --set image.repository=${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }} \
             --set image.tag=${{ env.IMAGE_TAG }} \
+            --set imagePullSecrets[0].name=jfrog-registry-secret \
             --set server.ha.enabled=true \
             --create-namespace
 
