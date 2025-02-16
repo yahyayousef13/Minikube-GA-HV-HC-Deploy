@@ -160,7 +160,7 @@ jobs:
             --set image.tag=${{ env.IMAGE_TAG }} \
             --set imagePullSecrets[0].name=jfrog-registry-secret \
             --set server.ha.enabled=true \
-            --create-namespace
+            --create-namespace \
             --wait
 
       # Step 14: Verify Deployment & Check Pod Status
