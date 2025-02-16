@@ -1,0 +1,2 @@
+certs/*.crt binary
+certs/*.key binary

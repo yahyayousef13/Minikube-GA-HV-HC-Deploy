@@ -20,12 +20,13 @@ spec:
         - containerPort: 8200
         env:
         - name: VAULT_ADDR
-          value: "https://127.0.0.1:8200"  # Use HTTPS for secure communication
+          value: "https://vault:8200"  # Use HTTPS for secure communication
         volumeMounts:
         - name: vault-config
           mountPath: /etc/vault.d
         - name: vault-ssl-cert
           mountPath: /vault/certs  # Mount the SSL certificate and key
+          readOnly: true  # Ensure security
       volumes:
       - name: vault-config
         configMap:
