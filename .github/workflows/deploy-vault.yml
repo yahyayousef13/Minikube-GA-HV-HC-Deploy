@@ -65,11 +65,11 @@ jobs:
           docker pull ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
       # Step 8: Install Helm
-      - name: Install Helm
-        run: |
-          echo "Installing Helm..."
-          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-          
+      #- name: Install Helm
+      #  run: |
+      #    echo "Installing Helm..."
+      #    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
       # Step 9: Lint Helm Chart
       - name: Lint Helm Chart
         run: helm lint ./helm
