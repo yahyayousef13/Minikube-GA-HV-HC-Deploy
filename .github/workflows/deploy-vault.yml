@@ -48,7 +48,9 @@ jobs:
       # Step 4: Generate Base64 Encoded JFrog Secret
       - name: Generate Base64 JFrog Secret
         run: |
-          echo -n '{"auths":{"${{ env.JFROG_REGISTRY }}":{"username":"${{ secrets.JFROG_USERNAME }}","password":"${{ secrets.JFROG_PASSWORD }}","email":"${{ secrets.JFROG_EMAIL }}","auth":"'$(echo -n "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" | base64)'"}}}' | base64 -w 0 > secret.txt
+          #echo -n '{"auths":{"${{ env.JFROG_REGISTRY }}":{"username":"${{ secrets.JFROG_USERNAME }}","password":"${{ secrets.JFROG_PASSWORD }}","email":"${{ secrets.JFROG_EMAIL }}","auth":"'$(echo -n "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" | base64)'"}}}' | base64 -w 0 > secret.txt
+          echo -n '{"auths":{"${{ env.JFROG_REGISTRY }}":{"username":"${{ secrets.JFROG_USERNAME }}","password":"${{ secrets.JFROG_PASSWORD }}","auth":"'$(echo -n "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" | base64 --wrap=0)'"}}}' | base64 --wrap=0 > secret.txt
+
 
       # Step 5: Create Kubernetes Secret Manifest
       - name: Create JFrog Registry Secret
