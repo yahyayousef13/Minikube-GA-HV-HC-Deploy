@@ -34,9 +34,9 @@ jobs:
       - name: Verify Docker Access
         run: docker --version
 
-      # Step 3: Set up Docker Buildx (for multi-platform builds)
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      # Step 3: Set up Docker Buildx (for multi-platform builds)  (Use for GA runner)
+      #- name: Set up Docker Buildx
+      #  uses: docker/setup-buildx-action@v2
 
       # Step 4: Log in to JFrog Artifactory
       - name: Log in to JFrog Artifactory
