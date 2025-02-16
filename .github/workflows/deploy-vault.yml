@@ -24,11 +24,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      # Step 3: Set up Minikube
-      - name: Set up Minikube
-        uses: medyagh/setup-minikube@v0.0.14
-        with:
-          driver: docker
+      # Step 3: Set up Minikube (Use for GA runner)
+      #- name: Set up Minikube
+      #  uses: medyagh/setup-minikube@v0.0.14
+      #  with:
+      #    driver: docker
 
       # Step 2: Verify Docker access
       - name: Verify Docker Access
