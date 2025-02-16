@@ -82,11 +82,11 @@ jobs:
           echo "Preparing Kubernetes namespace..."
           kubectl get namespace ${{ env.K8S_NAMESPACE }} || kubectl create namespace ${{ env.K8S_NAMESPACE }}
 
-      # Step 11: Load Image into Minikube
-      - name: Load Image into Minikube
-        run: |
-          echo "Loading Docker image into Minikube..."
-          minikube image load ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      # Step 11: Load Image into Minikube   (Use for GA runner)
+      #- name: Load Image into Minikube
+      #  run: |
+      #    echo "Loading Docker image into Minikube..."
+      #    minikube image load ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
       # Step 12: Dry Run Helm Deployment
       - name: Helm Dry Run
