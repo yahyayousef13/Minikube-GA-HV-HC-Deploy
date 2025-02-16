@@ -45,6 +45,7 @@ jobs:
           registry: ${{ env.JFROG_REGISTRY }}
           username: ${{ secrets.JFROG_USERNAME }}
           password: ${{ secrets.JFROG_PASSWORD }}
+          
       # Step 4: Generate Base64 Encoded JFrog Secret
       - name: Generate Base64 JFrog Secret
         run: |
@@ -101,7 +102,13 @@ jobs:
       #    echo "Installing Helm..."
       #    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-      # Step 9: Lint Helm Chart
+
+      - name: Check Helm and Kubectl Versions
+        run: |
+          kubectl version --client
+          helm version
+      
+      #Step 9: Lint Helm Chart
       - name: Lint Helm Chart
         run: helm lint ./helm
 
@@ -120,6 +127,11 @@ jobs:
         run: |
           echo "Preparing Kubernetes namespace..."
           kubectl get namespace ${{ env.K8S_NAMESPACE }} || kubectl create namespace ${{ env.K8S_NAMESPACE }}
+
+      - name: Verify JFrog Registry Secret
+        run: |
+          kubectl get secret jfrog-registry-secret -n ${{ env.K8S_NAMESPACE }}
+
 
       # Step 11: Load Image into Minikube   (Use for GA runner)
       #- name: Load Image into Minikube
@@ -149,6 +161,7 @@ jobs:
             --set imagePullSecrets[0].name=jfrog-registry-secret \
             --set server.ha.enabled=true \
             --create-namespace
+            --wait
 
       # Step 14: Verify Deployment & Check Pod Status
       - name: Check Deployment and Pod Status
