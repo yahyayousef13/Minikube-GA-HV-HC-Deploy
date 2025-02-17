@@ -6,13 +6,13 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  type: ClusterIP
+  #type: ClusterIP
   port: 8200 # The port exposed by the service      
   type: NodePort    # Change to LoadBalancer if needed (for cloud environments)
 
 
 vault:
-  addr: "https://vault:8200"  # Service name used within the Kubernetes cluster
+  addr: "https://127.0.0.1:8200"  # Service name used within the Kubernetes cluster
 
 # Define Vault SSL certificates
 certificates:
