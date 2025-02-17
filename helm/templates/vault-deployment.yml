@@ -19,7 +19,8 @@ spec:
         ports:
         - containerPort: {{ .Values.service.port }}
         env:
-
+        - name: VAULT_ADDR
+          value: "{{ .Values.vault.addr }}"  # Vault address from values.yaml
         - name: VAULT_API_ADDR
           value: "http://0.0.0.0:8200"  # Explicitly set the API address
         volumeMounts:
@@ -30,10 +31,10 @@ spec:
           readOnly: true  # Ensure security
         - name: vault-data
           mountPath: /vault/data   # Mount the persistent storage
-    securityContext:
-      capabilities:
-        add:
-          - IPC_LOCK  # Add IPC_LOCK capability          
+        securityContext:
+          capabilities:
+            add:
+              - IPC_LOCK  # Add IPC_LOCK capability  
       volumes:
       - name: vault-config
         configMap:
