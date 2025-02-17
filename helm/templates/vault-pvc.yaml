@@ -14,7 +14,7 @@ spec:
   storageClassName: manual
   hostPath:
     path: /mnt/d/HashiVault-Openshift-Deployment/Minikube-GA-HV-HC-Deploy/data/vault
----
+'''
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -26,4 +26,4 @@ spec:
     requests:
       storage: 10Gi # You can adjust the size based on your needs
   storageClassName: manual    #standard  # Or use a different storage class if necessary
-
+'''
