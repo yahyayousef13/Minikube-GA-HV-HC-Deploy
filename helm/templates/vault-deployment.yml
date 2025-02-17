@@ -19,8 +19,7 @@ spec:
         ports:
         - containerPort: {{ .Values.service.port }}
         env:
-        - name: VAULT_ADDR
-          value: "{{ .Values.vault.addr }}"  # Vault address from values.yaml
+
         - name: VAULT_API_ADDR
           value: "http://0.0.0.0:8200"  # Explicitly set the API address
         volumeMounts:
