@@ -46,24 +46,6 @@ jobs:
           username: ${{ secrets.JFROG_USERNAME }}
           password: ${{ secrets.JFROG_PASSWORD }}
           
-      # Step 4: Generate Base64 Encoded JFrog Secret
-      #- name: Generate Base64 JFrog Secret
-      #  run: |
-      #    echo -n '{"auths":{"${{ env.JFROG_REGISTRY }}":{"username":"${{ secrets.JFROG_USERNAME }}","password":"${{ secrets.JFROG_PASSWORD }}","auth":"'$(echo -n "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" | base64 --wrap=0)'"}}}' | base64 --wrap=0 > secret.txt
-          
-      # Step 5: Create Kubernetes Secret Manifest
-      #- name: Create JFrog Registry Secret
-      #  run: |
-      #    cat <<EOF > jfrog-secret.yaml
-      #    apiVersion: v1
-      #    kind: Secret
-      #    metadata:
-      #      name: jfrog-registry-secret
-      #      namespace: ${{ env.K8S_NAMESPACE }}
-      #    type: kubernetes.io/dockerconfigjson
-      #    data:
-      #      .dockerconfigjson: "$(cat secret.txt)"
-      #    EOF
 
 
       # Step 5: Build Docker Image
@@ -123,19 +105,8 @@ jobs:
         run: |
           echo "Preparing Kubernetes namespace..."
           kubectl get namespace ${{ env.K8S_NAMESPACE }} || kubectl create namespace ${{ env.K8S_NAMESPACE }}
-          
-      #step : Create JFrog Registry Secret
-      - name: Create JFrog Registry Secret
-        run: |
-          kubectl create secret docker-registry jfrog-registry-secret \
-            --docker-server=${{ env.JFROG_REGISTRY }} \
-            --docker-username=${{ secrets.JFROG_USERNAME }} \
-            --docker-password=${{ secrets.JFROG_PASSWORD }} \
-            --namespace=${{ env.K8S_NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
-        
-      - name: Verify JFrog Registry Secret
-        run: |
-          kubectl get secret jfrog-registry-secret -n ${{ env.K8S_NAMESPACE }}
+
+
 
 
       # Step 11: Load Image into Minikube   (Use for GA runner)
