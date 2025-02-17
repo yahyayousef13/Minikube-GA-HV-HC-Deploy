@@ -20,9 +20,9 @@ spec:
         - containerPort: {{ .Values.service.port }}
         env:
         - name: VAULT_ADDR
-          value: "{{ .Values.vault.addr }}"  # Vault address from values.yaml (HTTPS)
+          value: "https://127.0.0.1:8200"  # Local IP for local deployment
         - name: VAULT_API_ADDR
-          value: "https://vault:8200" # API address still using HTTP (this is fine)
+          value: "https://0.0.0.0:8200"
         volumeMounts:
         - name: vault-config
           mountPath: /etc/vault.d
