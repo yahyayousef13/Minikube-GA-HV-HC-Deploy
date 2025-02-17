@@ -27,6 +27,8 @@ spec:
         - name: vault-ssl-cert
           mountPath: /vault/certs
           readOnly: true  # Ensure security
+        - name: vault-data
+          mountPath: /vault/data   # Mount the persistent storage
       volumes:
       - name: vault-config
         configMap:
@@ -34,5 +36,8 @@ spec:
       - name: vault-ssl-cert
         secret:
           secretName: vault-ssl-cert  # Reference the secret containing SSL certs
+      - name: vault-data
+        persistentVolumeClaim:
+          claimName: vault-pvc  # Reference the PVC for persistent data storage
       imagePullSecrets:
       - name: jfrog-registry-secret
