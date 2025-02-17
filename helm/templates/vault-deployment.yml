@@ -20,30 +20,30 @@ spec:
         - containerPort: {{ .Values.service.port }}
         env:
         - name: VAULT_ADDR
-          value: "{{ .Values.vault.addr }}"  # Vault address from values.yaml
+          value: "{{ .Values.vault.addr }}"  # Vault address from values.yaml (HTTPS)
         - name: VAULT_API_ADDR
-          value: "http://0.0.0.0:8200"  # Explicitly set the API address
+          value: "http://0.0.0.0:8200"  # API address still using HTTP (this is fine)
         volumeMounts:
         - name: vault-config
           mountPath: /etc/vault.d
         - name: vault-ssl-cert
           mountPath: /vault/certs
-          readOnly: true  # Ensure security
+          readOnly: true  # Ensure certificates are read-only
         - name: vault-data
-          mountPath: /vault/data   # Mount the persistent storage
+          mountPath: /vault/data  # Mount persistent storage for Vault data
         securityContext:
           capabilities:
             add:
-              - IPC_LOCK  # Add IPC_LOCK capability  
+              - IPC_LOCK  # Add IPC_LOCK capability to prevent Vault from swapping
       volumes:
       - name: vault-config
         configMap:
           name: vault-config
       - name: vault-ssl-cert
         secret:
-          secretName: vault-ssl-cert  # Reference the secret containing SSL certs
+          secretName: vault-ssl-cert  # Secret containing SSL certs (created beforehand)
       - name: vault-data
         persistentVolumeClaim:
-          claimName: vault-pvc  # Reference the PVC for persistent data storage
+          claimName: vault-pvc  # Persistent volume claim for Vault data storage
       imagePullSecrets:
-      - name: jfrog-registry-secret
+      - name: jfrog-registry-secret  # If using a private registry
