@@ -10,12 +10,13 @@ data:
     
     listener "tcp" {
       address     = "0.0.0.0:8200"
-      tls_disable = 1
-      tls_cert_file = "certs/tls.crt"
-      tls_key_file  = "certs/tls.key"
+      tls_disable = 0
+      tls_cert_file = "{{ .Values.certificates.tlsCrtPath }}"
+      tls_key_file  = "{{ .Values.certificates.tlsKeyPath }}"
     }
     
     ui = true
+
 
     #monitoring - Grafana, Loki, prometheus
     #Scanning - Sonarcube , PRisma , checkmarx

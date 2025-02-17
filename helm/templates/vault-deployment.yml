@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: vault
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: vault
@@ -14,18 +14,18 @@ spec:
     spec:
       containers:
       - name: vault
-        image: trial086vpt.jfrog.io/vault-repo/vault-server:${IMAGE_TAG}
-        imagePullPolicy: Always
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: 8200
+        - containerPort: {{ .Values.service.port }}
         env:
         - name: VAULT_ADDR
-          value: "https://vault:8200"  # Use HTTPS for secure communication
+          value: "{{ .Values.vault.addr }}"  # Vault address from values.yaml
         volumeMounts:
         - name: vault-config
           mountPath: /etc/vault.d
         - name: vault-ssl-cert
-          mountPath: /vault/certs  # Mount the SSL certificate and key
+          mountPath: /vault/certs
           readOnly: true  # Ensure security
       volumes:
       - name: vault-config

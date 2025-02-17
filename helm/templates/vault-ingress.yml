@@ -8,17 +8,17 @@ metadata:
     nginx.ingress.kubernetes.io/secure-backends: "true"  # Secure communication with the backend (Vault)
 spec:
   rules:
-  - host: vault.local
+  - host: vault.local  # Replace with your actual domain if needed
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: vault-service
+            name: vault  # Use the correct service name (vault, not vault-service)
             port:
               number: 8200
   tls:
   - hosts:
-    - vault.local
+    - vault.local  # Replace with your actual domain if needed
     secretName: vault-ssl-cert  # Reference the secret containing the SSL certificate
