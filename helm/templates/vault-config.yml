@@ -11,12 +11,12 @@ data:
     listener "tcp" {
       address     = "0.0.0.0:8200"
       tls_disable = 0
-      tls_cert_file = "certs/vault.crt"
-      tls_key_file  = "certs/vault.key"
+      tls_cert_file = "certs/tls.crt"
+      tls_key_file  = "certs/tls.key"
     }
     
     ui = true
 
     #monitoring - Grafana, Loki, prometheus
     #Scanning - Sonarcube , PRisma , checkmarx
-    #SSL/TLS certificate - 
+    #SSL/TLS certificate - openssl
