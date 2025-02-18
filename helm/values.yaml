@@ -12,7 +12,7 @@ service:
 
 
 vault:
-  addr: "https://127.0.0.1:8200"  # Service name used within the Kubernetes cluster
+  addr: "https://vault:8200"  # Service name used within the Kubernetes cluster
 
 # Define Vault SSL certificates
 certificates:

@@ -20,7 +20,7 @@ spec:
         - containerPort: {{ .Values.service.port }}
         env:
         - name: VAULT_ADDR
-          value: "https://127.0.0.1:8200"  # Local IP for local deployment
+          value: "https://vault:8200"  # Local IP for local deployment
         - name: VAULT_API_ADDR
           value: "https://0.0.0.0:8200"
         volumeMounts:
