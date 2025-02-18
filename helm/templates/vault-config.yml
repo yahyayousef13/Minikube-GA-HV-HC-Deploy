@@ -20,4 +20,4 @@ data:
 
     #monitoring - Grafana, Loki, prometheus
     #Scanning - Sonarcube , PRisma , checkmarx
-    #SSL/TLS certificate - openssl
+    #SSL/TLS certificate - openssl using ingress and Nginx annotation
