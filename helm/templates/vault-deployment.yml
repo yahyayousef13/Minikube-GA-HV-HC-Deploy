@@ -19,10 +19,10 @@ spec:
         ports:
         - containerPort: {{ .Values.service.port }}
         env:
-        - name: VAULT_ADDR
-          value: "https://vault:8200"  # Local IP for local deployment
-        - name: VAULT_API_ADDR
-          value: "https://0.0.0.0:8200"
+          - name: VAULT_ADDR
+            value: "{{ .Values.vault.addr }}"  # Internal Vault Address for cluster
+          - name: VAULT_EXTERNAL_ADDR
+            value: "{{ .Values.vault.externalAddr }}"  # External Vault Address for outside access
         volumeMounts:
         - name: vault-config
           mountPath: /etc/vault.d

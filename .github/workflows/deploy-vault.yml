@@ -54,6 +54,7 @@ jobs:
           set -e  
           echo "Building Docker image..."
           docker build -t ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -f docker/Dockerfile .
+          
       - name: Cache Docker layers
         uses: actions/cache@v3
         with:

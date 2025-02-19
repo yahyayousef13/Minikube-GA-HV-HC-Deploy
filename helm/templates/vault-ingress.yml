@@ -7,6 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"         # Enforces HTTP to HTTPS redirection
     nginx.ingress.kubernetes.io/secure-backends: "true"      # Secures communication between Ingress and Vault backend
 spec:
+  ingressClassName: nginx                                # Explicitly define the Ingress class
   rules:
   - host: vault.local                                      # Replace with your actual domain if needed (ensure it resolves to Minikube's IP)
     http:

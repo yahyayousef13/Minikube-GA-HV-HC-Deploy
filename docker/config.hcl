@@ -6,7 +6,7 @@ storage "file" {
 # Listener configuration
 listener "tcp" {
   address     = "0.0.0.0:8200"
-  tls_disable = "true"  # Only for local testing, not recommended in production
+  tls_disable = "false"  # Only for local testing, not recommended in production
 }
 
 # Enable the Vault UI

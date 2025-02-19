@@ -15,7 +15,7 @@ data:
       tls_key_file  = "/vault/certs/tls.key"   # Path to the TLS private key
     }
     
-    ui = true  # Enable Vault UI (optional)
+    #ui = true  # Enable Vault UI (optional) ALready mentioned in docker config file
 
 
     #monitoring - Grafana, Loki, prometheus
