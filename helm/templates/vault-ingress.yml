@@ -6,6 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /            # Ensures that the path is redirected to root
     nginx.ingress.kubernetes.io/ssl-redirect: "true"         # Enforces HTTP to HTTPS redirection
     nginx.ingress.kubernetes.io/secure-backends: "true"      # Secures communication between Ingress and Vault backend
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"     
 spec:
   ingressClassName: nginx                                # Explicitly define the Ingress class
   rules:

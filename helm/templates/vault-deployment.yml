@@ -22,7 +22,9 @@ spec:
           - name: VAULT_ADDR
             value: "{{ .Values.vault.addr }}"  # Internal Vault Address for cluster
           - name: VAULT_EXTERNAL_ADDR
-            value: "{{ .Values.vault.externalAddr }}"  # External Vault Address for outside access
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP  # This automatically sets the external address to the Node IP.
         volumeMounts:
         - name: vault-config
           mountPath: /etc/vault.d

@@ -6,8 +6,8 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  #type: ClusterIP
-  type: NodePort    # Change to LoadBalancer if needed (for cloud environments)
+  type: ClusterIP
+  #type: NodePort    # Change to LoadBalancer if needed (for cloud environments)
   port: 8200 # The port exposed by the service
   nodePort: 30805  # This should match the one in your service.yaml
 
