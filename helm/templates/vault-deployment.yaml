@@ -49,3 +49,4 @@ spec:
           claimName: vault-pvc  # Persistent volume claim for Vault data storage
       imagePullSecrets:
       - name: jfrog-registry-secret  # If using a private registry
+      
