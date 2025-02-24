@@ -6,15 +6,15 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  type: ClusterIP
-  #type: NodePort    # Change to LoadBalancer if needed (for cloud environments)
+  #type: ClusterIP
+  type: NodePort    # Change to LoadBalancer if needed (for cloud environments)
   port: 8200 # The port exposed by the service
   nodePort: 30805  # This should match the one in your service.yaml
 
 
 vault:
   addr: "https://vault:8200"  # Default internal Vault address
-  externalAddr: "https://$(minikube ip):30805"  # Default external access
+  externalAddr: "https://192.168.49.2:30805"  # Default external access
 
 # Define Vault SSL certificates
 certificates:

@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: nginx                                # Explicitly define the Ingress class
   rules:
-  - host: vault.local                                      # Replace with your actual domain if needed (ensure it resolves to Minikube's IP)
+  - host: vault.minikube.local                                      # Replace with your actual domain if needed (ensure it resolves to Minikube's IP)
     http:
       paths:
       - path: /                                            # The root path for Vault
@@ -22,5 +22,5 @@ spec:
               number: 8200                                  # Vault service port (ensure it matches the service)
   tls:
   - hosts:
-    - vault.local                                          # Replace with your actual domain if needed
+    - vault.minikube.local                                          # Replace with your actual domain if needed
     secretName: vault-ssl-cert                             # Reference to the secret containing your TLS certs
