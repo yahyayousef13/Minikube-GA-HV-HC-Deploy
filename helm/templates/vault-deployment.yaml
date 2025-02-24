@@ -27,7 +27,7 @@ spec:
         volumeMounts:
         - name: vault-config
           mountPath: /etc/vault.d
-          readOnly: true  # Config should be read-only
+          readOnly: false  # Config should be read-only
         - name: vault-ssl-cert
           mountPath: /vault/certs
           readOnly: true  
@@ -45,8 +45,10 @@ spec:
 
       volumes:
       - name: vault-config
-        configMap:
-          name: vault-config
+        #configMap:
+        #  name: vault-config
+        persistentVolumeClaim:
+          claimName: vault-pvc  # ✅ Now using PVC instead of ConfigMap
       - name: vault-ssl-cert
         secret:
           secretName: vault-ssl-cert  
