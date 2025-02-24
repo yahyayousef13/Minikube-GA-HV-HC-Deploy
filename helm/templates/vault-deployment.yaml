@@ -34,9 +34,8 @@ spec:
         - name: vault-data
           mountPath: /vault/data  
 
-        command: ["/bin/sh", "-c"]
-        args:
-          - vault server -config=/etc/vault.d/vault.hcl  # Use the correct config path
+        command: ["vault"]
+        args: ["server", "-config=/etc/vault.d/vault.hcl"]
 
         securityContext:
           capabilities:

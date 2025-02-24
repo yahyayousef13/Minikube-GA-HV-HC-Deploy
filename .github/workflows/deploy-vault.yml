@@ -156,12 +156,12 @@ jobs:
       # Step: Verify Vault Deployment with Port-Forwarding
       - name: Verify Vault Accessibility
         run: |
-          echo "Checking Vault availability..."
-          kubectl port-forward svc/vault --namespace=${{ env.K8S_NAMESPACE }} 8200:8200 & echo $! > port.pid
+          echo "Checking Vault availability....
+          kubectl port-forward svc/vault --namespace=${{ env.K8S_NAMESPACE }} 8200:8200 &
+          FORWARD_PID=$!
           sleep 5  
           curl -k http://localhost:8200/v1/sys/health
-          kill $(cat port.pid)  # Ensure cleanup of the background process
-
+            kill $FORWARD_PID
       # Step: Delete Older Docker Images from JFrog
       - name: Delete Older Docker Images from JFrog
         run: |
@@ -174,6 +174,9 @@ jobs:
       - name: Rollback on Failure
         if: failure()
         run: |
-          echo "Rolling back if Vault was installed..."
-          helm list --namespace ${{ env.K8S_NAMESPACE }} | grep vault && helm rollback vault --namespace ${{ env.K8S_NAMESPACE }}
-
+          if helm list --namespace ${{ env.K8S_NAMESPACE }} | grep -q "vault"; then
+            echo "Rolling back Vault deployment..."
+            helm rollback vault --namespace ${{ env.K8S_NAMESPACE }}
+          else
+            echo "No existing Vault deployment to roll back."
+          fi
