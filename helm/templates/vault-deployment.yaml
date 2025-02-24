@@ -45,10 +45,10 @@ spec:
 
       volumes:
       - name: vault-config
-        #configMap:
-        #  name: vault-config
-        persistentVolumeClaim:
-          claimName: vault-pvc  # ✅ Now using PVC instead of ConfigMap
+        configMap:
+          name: vault-config
+        #persistentVolumeClaim:
+        #  claimName: vault-pvc  # ✅ Now using PVC instead of ConfigMap
       - name: vault-ssl-cert
         secret:
           secretName: vault-ssl-cert  
