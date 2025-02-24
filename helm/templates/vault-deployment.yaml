@@ -20,32 +20,39 @@ spec:
         - containerPort: {{ .Values.service.port }}
         env:
           - name: VAULT_ADDR
-            value: "{{ .Values.vault.addr }}"  # Internal Vault Address for cluster
+            value: "{{ .Values.vault.addr }}"  
           - name: VAULT_EXTERNAL_ADDR
-            value: "{{ .Values.vault.externalAddr }}"  # Uses the external address from values.yaml
+            value: "{{ .Values.vault.externalAddr }}"  
 
         volumeMounts:
         - name: vault-config
-          mountPath: /etc/vault.d  # path /etc/vault.d 
+          mountPath: /etc/vault.d
+          readOnly: true
         - name: vault-ssl-cert
           mountPath: /vault/certs
-          readOnly: true  # Ensure certificates are read-only
+          readOnly: true  
         - name: vault-data
-          mountPath: /vault/data  # Mount persistent storage for Vault data
+          mountPath: /vault/data  
+
+        command: ["/bin/sh", "-c"]
+        args:
+          - cp /etc/vault.d/vault.hcl /vault/data/vault.hcl &&
+            vault server -config=/vault/data/vault.hcl
+
         securityContext:
           capabilities:
             add:
-              - IPC_LOCK  # Add IPC_LOCK capability to prevent Vault from swapping
+              - IPC_LOCK  
+
       volumes:
       - name: vault-config
         configMap:
           name: vault-config
       - name: vault-ssl-cert
         secret:
-          secretName: vault-ssl-cert  # Secret containing SSL certs (created beforehand)
+          secretName: vault-ssl-cert  
       - name: vault-data
         persistentVolumeClaim:
-          claimName: vault-pvc  # Persistent volume claim for Vault data storage
+          claimName: vault-pvc  
       imagePullSecrets:
-      - name: jfrog-registry-secret  # If using a private registry
-      
+      - name: jfrog-registry-secret  
