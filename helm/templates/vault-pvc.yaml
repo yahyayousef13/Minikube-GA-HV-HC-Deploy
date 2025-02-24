@@ -8,6 +8,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi  # You can adjust the size based on your needs
+      storage: 1Gi  # You can adjust the size based on your needs
   storageClassName: standard  # Or use a different storage class if necessary
-
