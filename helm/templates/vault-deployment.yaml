@@ -23,6 +23,10 @@ spec:
           value: "{{ .Values.vault.addr }}"  
         - name: VAULT_EXTERNAL_ADDR
           value: "{{ .Values.vault.externalAddr }}"  
+        - name: VAULT_TLS_CERT_FILE
+          value: /vault/certs/tls.crt
+        - name: VAULT_TLS_KEY_FILE
+          value: /vault/certs/tls.key 
 
         volumeMounts:
         - name: vault-config
@@ -30,7 +34,7 @@ spec:
           readOnly: false  # Config should be read-only
         - name: vault-ssl-cert
           mountPath: /vault/certs
-          readOnly: true  
+          readOnly: true 
         - name: vault-data
           mountPath: /vault/data  
 

@@ -10,6 +10,7 @@ data:
     
     listener "tcp" {
       address     = "0.0.0.0:8200"
+      cluster_address = "https://vault:8201"
       tls_disable = 0 #Ensure that TLS is enabled
       tls_cert_file = "/vault/certs/tls.crt"   # Path to the TLS certificate
       tls_key_file  = "/vault/certs/tls.key"   # Path to the TLS private key
