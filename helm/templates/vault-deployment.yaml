@@ -19,15 +19,15 @@ spec:
         ports:
         - containerPort: {{ .Values.service.port }}
         env:
-          - name: VAULT_ADDR
-            value: "{{ .Values.vault.addr }}"  
-          - name: VAULT_EXTERNAL_ADDR
-            value: "{{ .Values.vault.externalAddr }}"  
+        - name: VAULT_ADDR
+          value: "{{ .Values.vault.addr }}"  
+        - name: VAULT_EXTERNAL_ADDR
+          value: "{{ .Values.vault.externalAddr }}"  
 
         volumeMounts:
         - name: vault-config
           mountPath: /etc/vault.d
-          readOnly: true
+          readOnly: true  # Config should be read-only
         - name: vault-ssl-cert
           mountPath: /vault/certs
           readOnly: true  
@@ -36,8 +36,7 @@ spec:
 
         command: ["/bin/sh", "-c"]
         args:
-          - cp /etc/vault.d/vault.hcl /vault/data/vault.hcl &&
-            vault server -config=/vault/data/vault.hcl
+          - vault server -config=/etc/vault.d/vault.hcl  # Use the correct config path
 
         securityContext:
           capabilities:
