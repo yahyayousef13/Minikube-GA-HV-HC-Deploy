@@ -45,7 +45,8 @@ spec:
  
         securityContext:
           runAsNonRoot: true
-          runAs:User  1000
+          runAsUser: 1000  # ✅ Fixed syntax
+
           capabilities:
             drop: 
               - ALL
