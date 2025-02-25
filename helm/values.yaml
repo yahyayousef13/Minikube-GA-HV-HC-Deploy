@@ -1,44 +1,47 @@
+# Number of replicas for the Vault deployment
 replicaCount: 1
 
+# Image configuration for the Vault server
 image:
   repository: trial4w4crx.jfrog.io/vault-repo/vault-server
   tag: "latest"
   pullPolicy: IfNotPresent
 
+# Service configuration for accessing Vault
 service:
-  #type: ClusterIP
-  type: NodePort    # Change to LoadBalancer if needed (for cloud environments)
-  port: 8200 # The port exposed by the service
-  nodePort: 30805  # This should match the one in your service.yaml
+  type: NodePort  # Change to LoadBalancer for cloud environments
+  port: 8200      # The port exposed by the service
+  nodePort: 30805 # This should match the one in your service.yaml
 
-
+# Vault addresses for internal and external access
 vault:
   addr: "https://vault:8200"  # Default internal Vault address
   externalAddr: "https://192.168.49.2:30805"  # Default external access
 
-# Storage Configuration
+# Storage configuration for Vault
 storage:
   backend: "raft"  # Use "file" for non-HA
   path: "/vault/data"
-  
-# Define Vault SSL certificates
+
+# SSL certificate paths
 certificates:
   tlsCrtPath: "/vault/certs/tls.crt"
   tlsKeyPath: "/vault/certs/tls.key"
 
-
+# Security context for the Vault server
 server:
   securityContext:
-    runAsUser: 100
+    runAs: User  100
     fsGroup: 100
     runAsNonRoot: true
 
+  # Init container to fix permissions on the data directory
   extraInitContainers:
     - name: fix-permissions
       image: busybox
       command: [ "sh", "-c", "chown -R 100:100 /vault/data && chmod -R 770 /vault/data" ]
       securityContext:
-        runAsUser: 0
+        runAs:User  0
       volumeMounts:
         - name: data
           mountPath: /vault/data
@@ -47,6 +50,7 @@ server:
     - mountPath: /vault/data
       name: data
 
+# Persistent volume configuration
 volumes:
   - name: data
     persistentVolumeClaim:

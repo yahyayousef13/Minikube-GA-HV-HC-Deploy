@@ -4,23 +4,25 @@ metadata:
   name: vault-config
 data:
   vault.hcl: |
+    # Storage backend configuration using Raft
     storage "raft" {
-      path = "/vault/data"
-      node_id = "vault-0"
+      path = "/vault/data"  # Path to store Raft data
+      node_id = "vault-0"   # Unique identifier for this Vault node
     }
 
-    
+    # Listener configuration for Vault
     listener "tcp" {
-      address = "127.0.0.1:8200"
-      cluster_address = "https://vault:8201"
-      tls_disable = 0 # Ensure that TLS is enabled
-      tls_cert_file = "/vault/certs/tls.crt"
-      tls_key_file  = "/vault/certs/tls.key"
+      address = "127.0.0.1:8200"  # Bind to localhost
+      cluster_address = "https://vault:8201"  # Address for cluster communication
+      tls_disable = 0  # Ensure that TLS is enabled
+      tls_cert_file = "/vault/certs/tls.crt"  # Path to TLS certificate
+      tls_key_file  = "/vault/certs/tls.key"   # Path to TLS key
     }
 
-    api_addr = "https://192.168.49.2:30805"
-    ui = true
-    disable_mlock = true
+    # API address for external access
+    api_addr = "https://192.168.49.2:30805"  # Change this as needed for your environment
+    ui = true  # Enable the Vault UI
+    disable_mlock = true  # Consider enabling mlock for better security
 
 
     #monitoring - Grafana, Loki, prometheus

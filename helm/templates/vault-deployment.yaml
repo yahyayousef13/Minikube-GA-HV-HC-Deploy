@@ -12,7 +12,7 @@ spec:
       labels:
         app: vault
     spec:
-      securityContext:
+      securityContext:  # Correct placement and casing
         fsGroup: 1000
       containers:
       - name: vault
@@ -33,7 +33,7 @@ spec:
         volumeMounts:
         - name: vault-config
           mountPath: /etc/vault.d
-          readOnly: true  # Config should be read-only
+          readOnly: true
         - name: vault-ssl-cert
           mountPath: /vault/certs
           readOnly: true 
@@ -43,9 +43,9 @@ spec:
         command: ["vault"]
         args: ["server", "-config=/etc/vault.d/vault.hcl"]
  
-        securityContext:
+        securityContext:  # This should be at the container level
           runAsNonRoot: true
-          runAsUser: 1000
+          runAs:User  1000
           capabilities:
             drop: 
               - ALL
