@@ -63,20 +63,21 @@ spec:
 
         livenessProbe:
           httpGet:
-            path: /v1/sys/health
+            path: /v1/sys/health?standbyok=true  # ✅ Allow standby mode
             port: 8200
             scheme: HTTPS
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 20  # ⏳ Increase delay
+          periodSeconds: 15  # 🔄 Reduce probe frequency
 
         readinessProbe:
           httpGet:
-            path: /v1/sys/health
+            path: /v1/sys/health?standbyok=true  # ✅ Allow standby mode
             port: 8200
             scheme: HTTPS
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          timeoutSeconds: 3
+          initialDelaySeconds: 10  # ⏳ Increase delay
+          periodSeconds: 10  # 🔄 Reduce probe frequency
+          timeoutSeconds: 5
+
 
       volumes:
       - name: vault-config
