@@ -11,18 +11,19 @@ data:
       node_id = "vault-0"
     }
 
-    # Cluster address
-    cluster_address = "{{ .Values.vault.clusterAddr }}"  # Uses the value from values.yaml
-
     # Listener configuration for Vault
     listener "tcp" {
-      address         = "0.0.0.0:8200"  # Bind to all network interfaces
+      address         = "0.0.0.0:8200"  
       tls_disable     = 0
       tls_cert_file   = "{{ .Values.certificates.tlsCrtPath }}"
       tls_key_file    = "{{ .Values.certificates.tlsKeyPath }}"
     }
 
-    # API address for external access
-    api_addr = "{{ .Values.vault.externalAddr }}"  # Uses the external address from values.yaml
+    # API address
+    api_addr = "{{ .Values.vault.externalAddr }}" 
+
+    # Cluster address (for Raft)
+    cluster_addr = "{{ .Values.vault.clusterAddr }}"  
+
     ui = true
     disable_mlock = true
