@@ -25,3 +25,28 @@ storage:
 certificates:
   tlsCrtPath: "/vault/certs/tls.crt"
   tlsKeyPath: "/vault/certs/tls.key"
+
+
+server:
+  extraInitContainers:
+    - name: fix-permissions
+      image: busybox
+      command: [ "sh", "-c", "chown -R 100:100 /vault/data && chmod -R 770 /vault/data" ]
+      securityContext:
+        runAsUser: 0
+      volumeMounts:
+        - name: data
+          mountPath: /vault/data
+  securityContext:
+    runAsUser: 100
+    fsGroup: 100
+    runAsNonRoot: true
+
+  volumeMounts:
+    - mountPath: /vault/data
+      name: data
+
+volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: vault-pvc  # Ensure PVC exists in your deployment
