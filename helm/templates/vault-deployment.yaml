@@ -12,6 +12,8 @@ spec:
       labels:
         app: vault
     spec:
+      SecurityContext:
+        fsGroup: 1000
       containers:
       - name: vault
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -44,7 +46,7 @@ spec:
         securityContext:
           runAsNonRoot: true
           runAsUser: 1000
-          fsGroup: 1000
+
           capabilities:
             drop: 
               - ALL

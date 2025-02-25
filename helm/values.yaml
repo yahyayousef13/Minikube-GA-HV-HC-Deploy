@@ -28,6 +28,11 @@ certificates:
 
 
 server:
+  securityContext:
+    runAsUser: 100
+    fsGroup: 100
+    runAsNonRoot: true
+
   extraInitContainers:
     - name: fix-permissions
       image: busybox
@@ -37,10 +42,6 @@ server:
       volumeMounts:
         - name: data
           mountPath: /vault/data
-  securityContext:
-    runAsUser: 100
-    fsGroup: 100
-    runAsNonRoot: true
 
   volumeMounts:
     - mountPath: /vault/data
@@ -49,4 +50,4 @@ server:
 volumes:
   - name: data
     persistentVolumeClaim:
-      claimName: vault-pvc  # Ensure PVC exists in your deployment
+      claimName: vault-pvc # Ensure PVC exists in your deployment

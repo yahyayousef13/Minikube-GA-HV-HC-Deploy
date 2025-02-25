@@ -82,12 +82,23 @@ jobs:
       #    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 
+      # Step 10: Delete Older Docker Images from JFrog
+      - name: Delete Older Docker Images from JFrog
+        run: |
+          echo "Deleting older images from JFrog..."
+          IMAGES_TO_DELETE=$(curl -u "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" \
+            -s "https://${{ env.JFROG_REGISTRY }}/artifactory/api/docker/${{ env.JFROG_REPO }}/v2/${{ env.IMAGE_NAME }}/tags/list" | jq -r '.tags | map(select(contains("-")))|sort_by(.)|.[0:-3][]')
+          for tag in $IMAGES_TO_DELETE; do
+            curl -u "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" \
+              -X DELETE "https://${{ env.JFROG_REGISTRY }}/artifactory/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:$tag"
+          done
+
       - name: Check Helm and Kubectl Versions
         run: |
           kubectl version --client
           helm version
       
-      #Step 10: Lint Helm Chart
+      #Step 11: Lint Helm Chart
       - name: Lint Helm Chart
         run: helm lint ./helm
 
@@ -101,7 +112,7 @@ jobs:
             helm-${{ runner.os }}-
       
 
-      # Step 11: Prepare Namespace in Minikube
+      # Step 12: Prepare Namespace in Minikube
       - name: Create Namespace if Not Exists
         run: |
           echo "Preparing Kubernetes namespace..."
@@ -164,19 +175,8 @@ jobs:
           curl -k http://localhost:8200/v1/sys/health || echo "Vault is not reachable!"
           kill $FORWARD_PID
 
-
-      # Step 18: Delete Older Docker Images from JFrog
-      - name: Delete Older Docker Images from JFrog
-        run: |
-          echo "Deleting older images from JFrog..."
-          IMAGES_TO_DELETE=$(curl -u "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" \
-            -s "https://${{ env.JFROG_REGISTRY }}/artifactory/api/docker/${{ env.JFROG_REPO }}/v2/${{ env.IMAGE_NAME }}/tags/list" | jq -r '.tags | map(select(contains("-")))|sort_by(.)|.[0:-3][]')
-          for tag in $IMAGES_TO_DELETE; do
-            curl -u "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" \
-              -X DELETE "https://${{ env.JFROG_REGISTRY }}/artifactory/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:$tag"
-          done
-
-        # Step 19: Rollback on Failure
+          
+        # Step 18: Rollback on Failure
       - name: Rollback on Failure
         if: failure()
         run: |
