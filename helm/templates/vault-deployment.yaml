@@ -12,7 +12,7 @@ spec:
       labels:
         app: vault
     spec:
-      securityContext:  # Correct placement and casing
+      securityContext:
         fsGroup: 1000
       containers:
       - name: vault
@@ -43,7 +43,7 @@ spec:
         command: ["vault"]
         args: ["server", "-config=/etc/vault.d/vault.hcl"]
  
-        securityContext:  # This should be at the container level
+        securityContext:
           runAsNonRoot: true
           runAs:User  1000
           capabilities:
