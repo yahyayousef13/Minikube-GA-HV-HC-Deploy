@@ -83,15 +83,25 @@ jobs:
 
 
       # Step 10: Delete Older Docker Images from JFrog
-      - name: Delete Older Docker Images from JFrog
+      - name: Delete older images from JFrog
         run: |
           echo "Deleting older images from JFrog..."
+      
+          # Fetch tags from JFrog Artifactory and extract image tags without using jq
           IMAGES_TO_DELETE=$(curl -u "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" \
-            -s "https://${{ env.JFROG_REGISTRY }}/artifactory/api/docker/${{ env.JFROG_REPO }}/v2/${{ env.IMAGE_NAME }}/tags/list" | jq -r '.tags | map(select(contains("-")))|sort_by(.)|.[0:-3][]')
+            -s "https://trial086vpt.jfrog.io/artifactory/api/docker/vault-repo/v2/vault-server/tags/list" | \
+            grep -o '"tags":\[[^]]*\]' | sed 's/"tags":\[\|\]//g' | tr -d '"' | tr ',' '\n' | grep '-')
+      
+          # Sort tags and exclude the latest 3 versions
+          IMAGES_TO_DELETE=$(echo "$IMAGES_TO_DELETE" | sort | head -n -3)
+      
           for tag in $IMAGES_TO_DELETE; do
+            echo "Deleting image: $tag"
             curl -u "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" \
-              -X DELETE "https://${{ env.JFROG_REGISTRY }}/artifactory/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:$tag"
+              -X DELETE "https://trial086vpt.jfrog.io/artifactory/vault-repo/vault-server:$tag"
           done
+        shell: /usr/bin/bash
+      
 
       - name: Check Helm and Kubectl Versions
         run: |
