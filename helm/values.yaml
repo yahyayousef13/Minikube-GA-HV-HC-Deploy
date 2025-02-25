@@ -16,6 +16,11 @@ vault:
   addr: "https://vault:8200"  # Default internal Vault address
   externalAddr: "https://192.168.49.2:30805"  # Default external access
 
+# Storage Configuration
+storage:
+  backend: "raft"  # Use "file" for non-HA
+  path: "/vault/data"
+  
 # Define Vault SSL certificates
 certificates:
   tlsCrtPath: "/vault/certs/tls.crt"

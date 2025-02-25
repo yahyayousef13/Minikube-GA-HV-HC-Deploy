@@ -4,19 +4,22 @@ metadata:
   name: vault-config
 data:
   vault.hcl: |
-    storage "file" {
+    storage "raft" {
       path = "/vault/data"
+      node_id = "vault-0"
     }
+
     
     listener "tcp" {
-      address     = "0.0.0.0:8200"
+      address = "127.0.0.1:8200"
       cluster_address = "https://vault:8201"
-      tls_disable = 0 #Ensure that TLS is enabled
-      tls_cert_file = "/vault/certs/tls.crt"   # Path to the TLS certificate
-      tls_key_file  = "/vault/certs/tls.key"   # Path to the TLS private key
+      tls_disable = 0 # Ensure that TLS is enabled
+      tls_cert_file = "/vault/certs/tls.crt"
+      tls_key_file  = "/vault/certs/tls.key"
     }
+
     api_addr = "https://192.168.49.2:30805"
-    ui = true  # Enable Vault UI (optional) 
+    ui = true
     disable_mlock = true
 
 
