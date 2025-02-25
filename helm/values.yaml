@@ -33,7 +33,7 @@ certificates:
 # Security context for the Vault server
 server:
   securityContext:
-    runAs: User  100
+    runAsUser:  100
     fsGroup: 100
     runAsNonRoot: true
 
