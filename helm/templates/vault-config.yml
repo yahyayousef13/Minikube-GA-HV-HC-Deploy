@@ -7,24 +7,22 @@ data:
   vault.hcl: |
     # Storage backend using Raft
     storage "raft" {
-      path    = "/vault/data"
+      path    = "{{ .Values.storage.path }}"
       node_id = "vault-0"
     }
+
+    # Cluster address
+    cluster_address = "{{ .Values.vault.clusterAddr }}"  # Uses the value from values.yaml
 
     # Listener configuration for Vault
     listener "tcp" {
       address         = "0.0.0.0:8200"  # Bind to all network interfaces
-      cluster_address = "https://$(HOSTNAME).vault-deployment.svc.cluster.local:8201"  # Use pod DNS name
       tls_disable     = 0
-      tls_cert_file   = "/vault/certs/tls.crt"
-      tls_key_file    = "/vault/certs/tls.key"
+      tls_cert_file   = "{{ .Values.certificates.tlsCrtPath }}"
+      tls_key_file    = "{{ .Values.certificates.tlsKeyPath }}"
     }
 
     # API address for external access
-    api_addr = "https://192.168.49.2:30805"  # Change this as needed for your environment
+    api_addr = "{{ .Values.vault.externalAddr }}"  # Uses the external address from values.yaml
     ui = true
     disable_mlock = true
-
-    #monitoring - Grafana, Loki, prometheus
-    #Scanning - Sonarcube , PRisma , checkmarx
-    #SSL/TLS certificate - openssl using ingress and Nginx annotation (Done)
