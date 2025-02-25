@@ -2,28 +2,28 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: vault-config
+  namespace: vault-deployment
 data:
   vault.hcl: |
-    # Storage backend configuration using Raft
+    # Storage backend using Raft
     storage "raft" {
-      path = "/vault/data"  # Path to store Raft data
-      node_id = "vault-0"   # Unique identifier for this Vault node
+      path    = "/vault/data"
+      node_id = "vault-0"
     }
 
     # Listener configuration for Vault
     listener "tcp" {
-      address = "0.0.0.0:8200"  # Bind to localhost
-      cluster_address = "https://vault:8201"  # Address for cluster communication
-      tls_disable = 0  # Ensure that TLS is enabled
-      tls_cert_file = "/vault/certs/tls.crt"  # Path to TLS certificate
-      tls_key_file  = "/vault/certs/tls.key"   # Path to TLS key
+      address         = "0.0.0.0:8200"  # Bind to all network interfaces
+      cluster_address = "https://$(HOSTNAME).vault-deployment.svc.cluster.local:8201"  # Use pod DNS name
+      tls_disable     = 0
+      tls_cert_file   = "/vault/certs/tls.crt"
+      tls_key_file    = "/vault/certs/tls.key"
     }
 
     # API address for external access
     api_addr = "https://192.168.49.2:30805"  # Change this as needed for your environment
-    ui = true  # Enable the Vault UI
-    disable_mlock = true  # Consider enabling mlock for better security
-
+    ui = true
+    disable_mlock = true
 
     #monitoring - Grafana, Loki, prometheus
     #Scanning - Sonarcube , PRisma , checkmarx
