@@ -60,7 +60,7 @@ spec:
           limits:
             memory: "1Gi"
             cpu: "500m"
-
+'''
         livenessProbe:
           httpGet:
             path: /v1/sys/health?standbyok=true  # ✅ Allow standby mode
@@ -77,7 +77,7 @@ spec:
           initialDelaySeconds: 15  # ⏳ Increase delay
           periodSeconds: 15  # 🔄 Reduce probe frequency
           timeoutSeconds: 5
-
+'''
 
       volumes:
       - name: vault-config
