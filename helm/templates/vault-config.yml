@@ -11,24 +11,12 @@ data:
       node_id = "vault-0"
     }
 
-    # Listener configuration for Vault
+    # Listener configuration for Vault 
     listener "tcp" {
       address         = "0.0.0.0:8200"  
       tls_disable     = 0
       tls_cert_file   = "{{ .Values.certificates.tlsCrtPath }}"
       tls_key_file    = "{{ .Values.certificates.tlsKeyPath }}"
-<<<<<<< HEAD
-    }
-
-    # API address
-    api_addr = "{{ .Values.vault.externalAddr }}" 
-
-    # Cluster address (for Raft)
-    cluster_addr = "{{ .Values.vault.clusterAddr }}"  
-
-    ui = true
-    disable_mlock = true
-=======
       tls_ca_file   = "{{ .Values.certificates.caCrtPath }}"  # Reference CA certificate
     }
 
@@ -40,4 +28,3 @@ data:
     
     ui = true
     disable_mlock = true
->>>>>>> upstream/main
