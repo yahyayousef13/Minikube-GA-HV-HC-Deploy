@@ -17,10 +17,11 @@ data:
       tls_disable     = 0
       tls_cert_file   = "{{ .Values.certificates.tlsCrtPath }}"
       tls_key_file    = "{{ .Values.certificates.tlsKeyPath }}"
+      tls_ca_file   = "{{ .Values.certificates.caCrtPath }}"  # Reference CA certificate
     }
 
     # API address
-    api_addr = "https://192.168.49.2:32000"  # Set to the correct external IP
+    api_addr = "https://vault.minikube.local:8200"  # ✅ Match Ingress hostname  # Set to the correct external IP
 
     # Cluster address (for Raft)
     cluster_addr = "https://vault-0.vault-internal:8201"  # Internal DNS for Raft  

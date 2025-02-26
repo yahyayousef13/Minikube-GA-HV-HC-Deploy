@@ -9,17 +9,16 @@ image:
 
 # Service configuration for accessing Vault
 service:
-  type: NodePort  # Change to LoadBalancer for cloud environments
-  port: 8200      # The port exposed by the service
-  #nodePort: 30805 # This should match the one in your service.yaml
+  type: ClusterIP # Change to LoadBalancer for cloud environments
+  port: 8200      # The port exposed by the servicel
   nodePort: 32000  # Set a fixed NodePort
 
 
 # Vault addresses for internal and external access
 vault:
-  addr: "https://192.168.49.2:32000"  # Set to the correct external IP and port
-  externalAddr: "https://192.168.49.2:32000"
-  clusterAddr: "https://vault-0.vault-internal:8201"  # Use internal DNS for Raft cluster
+  addr: "https://vault.minikube.local:8200"  # ✅ Match Ingress  # Updated to match the certificate SAN
+  externalAddr: "https://10.244.0.23:8200"
+  clusterAddr: "https://vault-0.vault-internal:8201"
 
 
 # Storage configuration for Vault
@@ -31,6 +30,7 @@ storage:
 certificates:
   tlsCrtPath: "/vault/certs/tls.crt"
   tlsKeyPath: "/vault/certs/tls.key"
+  caCrtPath: "/vault/certs/ca.crt"
 
 # Security context for the Vault server
 server:
@@ -56,6 +56,6 @@ server:
 
 # Persistent volume configuration
 volumes:
-  - name: data
+  - name: vault-data
     persistentVolumeClaim:
       claimName: vault-pvc # Ensure PVC exists in your deployment

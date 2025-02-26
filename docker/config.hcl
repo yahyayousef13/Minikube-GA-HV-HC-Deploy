@@ -8,6 +8,7 @@ listener "tcp" {
   address     = "0.0.0.0:8200"
   tls_cert_file = "/vault/certs/tls.crt"
   tls_key_file  = "/vault/certs/tls.key"
+  tls_ca_file   = "/vault/certs/ca.crt"  # Reference CA certificate
 }
 
 # Enable the Vault UI
