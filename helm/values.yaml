@@ -35,13 +35,8 @@ certificates:
 # Security context for the Vault server
 server:
   securityContext:
-<<<<<<< HEAD
-    runAsUser:  100
-    fsGroup: 100
-=======
     runAsUser:  1000
     fsGroup: 1000
->>>>>>> upstream/main
     runAsNonRoot: true
 
   # Init container to fix permissions on the data directory
@@ -58,7 +53,6 @@ server:
   volumeMounts:
     - mountPath: /vault/data
       name: data
-
 # Persistent volume configuration
 volumes:
   - name: vault-data
