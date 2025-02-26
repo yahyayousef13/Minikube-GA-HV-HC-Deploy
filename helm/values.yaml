@@ -11,7 +11,9 @@ image:
 service:
   type: NodePort  # Change to LoadBalancer for cloud environments
   port: 8200      # The port exposed by the service
-  nodePort: 30805 # This should match the one in your service.yaml
+  #nodePort: 30805 # This should match the one in your service.yaml
+  nodePort: 32000  # Set a fixed NodePort
+
 
 # Vault addresses for internal and external access
 vault:
