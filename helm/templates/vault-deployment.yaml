@@ -26,9 +26,9 @@ spec:
         - name: VAULT_EXTERNAL_ADDR
           value: "{{ .Values.vault.externalAddr }}"  
         - name: VAULT_TLS_CERT_FILE
-          value: /vault/certs/tls.crt
+          value: "{{ .Values.certificates.tlsCrtPath }}"
         - name: VAULT_TLS_KEY_FILE
-          value: /vault/certs/tls.key 
+          value: "{{ .Values.certificates.tlsKeyPath }}" 
 
         volumeMounts:
         - name: vault-config
@@ -66,16 +66,16 @@ spec:
             path: /v1/sys/health?standbyok=true  # ✅ Allow standby mode
             port: 8200
             scheme: HTTPS
-          initialDelaySeconds: 20  # ⏳ Increase delay
-          periodSeconds: 15  # 🔄 Reduce probe frequency
+          initialDelaySeconds: 25  # ⏳ Increase delay
+          periodSeconds: 20  # 🔄 Reduce probe frequency
 
         readinessProbe:
           httpGet:
             path: /v1/sys/health?standbyok=true  # ✅ Allow standby mode
             port: 8200
             scheme: HTTPS
-          initialDelaySeconds: 10  # ⏳ Increase delay
-          periodSeconds: 10  # 🔄 Reduce probe frequency
+          initialDelaySeconds: 15  # ⏳ Increase delay
+          periodSeconds: 15  # 🔄 Reduce probe frequency
           timeoutSeconds: 5
 
 

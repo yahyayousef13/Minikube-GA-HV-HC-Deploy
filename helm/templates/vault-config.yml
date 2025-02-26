@@ -20,10 +20,10 @@ data:
     }
 
     # API address
-    api_addr = "{{ .Values.vault.externalAddr }}" 
+    api_addr = "https://192.168.49.2:30805"  # Set to the correct external IP
 
     # Cluster address (for Raft)
-    cluster_addr = "{{ .Values.vault.clusterAddr }}"  
-
+    cluster_addr = "https://vault-0.vault-internal:8201"  # Internal DNS for Raft  
+    
     ui = true
     disable_mlock = true

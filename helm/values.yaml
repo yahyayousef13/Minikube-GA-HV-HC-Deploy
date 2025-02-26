@@ -15,9 +15,9 @@ service:
 
 # Vault addresses for internal and external access
 vault:
-  addr: "https://0.0.0.0:8200"  # Default internal Vault address
-  externalAddr: "https://192.168.49.2:30805"  # Default external access
-  clusterAddr: "https://0.0.0.0:8201"  # <-- Add this line
+  addr: "https://192.168.49.2:30805"  # Set to the correct external IP and port
+  externalAddr: "https://192.168.49.2:30805"
+  clusterAddr: "https://vault-0.vault-internal:8201"  # Use internal DNS for Raft cluster
 
 
 # Storage configuration for Vault
@@ -33,15 +33,15 @@ certificates:
 # Security context for the Vault server
 server:
   securityContext:
-    runAsUser:  100
-    fsGroup: 100
+    runAsUser:  1000
+    fsGroup: 1000
     runAsNonRoot: true
 
   # Init container to fix permissions on the data directory
   extraInitContainers:
     - name: fix-permissions
       image: busybox
-      command: [ "sh", "-c", "chown -R 100:100 /vault/data && chmod -R 770 /vault/data" ]
+      command: [ "sh", "-c", "chown -R 1000:1000 /vault/data && chmod -R 770 /vault/data" ]
       securityContext:
         runAsUser:  0
       volumeMounts:
