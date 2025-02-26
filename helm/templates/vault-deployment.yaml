@@ -60,24 +60,6 @@ spec:
           limits:
             memory: "1Gi"
             cpu: "500m"
-'''
-        livenessProbe:
-          httpGet:
-            path: /v1/sys/health?standbyok=true  # ✅ Allow standby mode
-            port: 8200
-            scheme: HTTPS
-          initialDelaySeconds: 25  # ⏳ Increase delay
-          periodSeconds: 20  # 🔄 Reduce probe frequency
-
-        readinessProbe:
-          httpGet:
-            path: /v1/sys/health?standbyok=true  # ✅ Allow standby mode
-            port: 8200
-            scheme: HTTPS
-          initialDelaySeconds: 15  # ⏳ Increase delay
-          periodSeconds: 15  # 🔄 Reduce probe frequency
-          timeoutSeconds: 5
-'''
 
       volumes:
       - name: vault-config
