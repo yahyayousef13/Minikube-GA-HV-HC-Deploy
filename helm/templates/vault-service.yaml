@@ -5,8 +5,8 @@ metadata:
   namespace: {{ .Release.Namespace }}  # Use release namespace
 spec:
   ports:
-    - port: {{ .Values.service.port }}      # Reference service port from values.yaml
-      targetPort: {{ .Values.service.port }} # Reference target port from values.yaml
+    - port: {{ .Values.service.port }}     
+      targetPort: {{ .Values.service.port }}  
   selector:
-    app: vault  # Selector to match the Vault app
-  type: {{ .Values.service.type }}           # Service type (e.g., NodePort, LoadBalancer)
+    app: vault  
+  type: {{ .Values.service.type }}  # Use ClusterIP without nodePort
