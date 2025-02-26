@@ -17,8 +17,8 @@ service:
 
 # Vault addresses for internal and external access
 vault:
-  addr: "https://192.168.49.2:30805"  # Set to the correct external IP and port
-  externalAddr: "https://192.168.49.2:30805"
+  addr: "https://192.168.49.2:32000"  # Set to the correct external IP and port
+  externalAddr: "https://192.168.49.2:32000"
   clusterAddr: "https://vault-0.vault-internal:8201"  # Use internal DNS for Raft cluster
 
 
