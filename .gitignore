@@ -2,4 +2,4 @@ cicd(old).yml
 dir data
 depcopy.yml
 # Ignore the vault-ca directory
-helm/certs/vault-ca
+helm/certs/vault-ca/
