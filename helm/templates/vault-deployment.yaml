@@ -52,6 +52,9 @@ spec:
           readOnly: true 
         - name: vault-data
           mountPath: /vault/data  
+        - name: vault-ca
+          mountPath: /etc/vault/ca
+          readOnly: true
 
         command: ["vault"]
         args: ["server", "-config=/etc/vault.d/vault.hcl"]
@@ -84,6 +87,9 @@ spec:
       - name: vault-data
         persistentVolumeClaim:
           claimName: vault-pvc  
+      - name: vault-ca
+        secret:
+          secretName: vault-ca-cert
 
       imagePullSecrets:
       - name: jfrog-registry-secret

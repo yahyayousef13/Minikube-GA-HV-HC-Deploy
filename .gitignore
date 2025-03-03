@@ -1,4 +1,9 @@
 cicd(old).yml
 dir data
 depcopy.yml
+<<<<<<< HEAD
 helm\certs\vault-ca
+=======
+# Ignore the vault-ca directory
+helm/certs/vault-ca/
+>>>>>>> upstream/main

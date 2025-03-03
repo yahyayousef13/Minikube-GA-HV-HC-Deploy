@@ -1,0 +1,63 @@
+<<<<<<< HEAD:helm/templates/vault-config.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-config
+  namespace: vault-deployment
+data:
+  vault.hcl: |
+    # Storage backend using Raft
+    storage "raft" {
+      path    = "{{ .Values.storage.path }}"
+      node_id = "vault-0"
+    }
+
+    # Listener configuration for Vault 
+    listener "tcp" {
+      address         = "0.0.0.0:8200"  
+      tls_disable     = 0
+      tls_cert_file   = "{{ .Values.certificates.tlsCrtPath }}"
+      tls_key_file    = "{{ .Values.certificates.tlsKeyPath }}"
+      tls_ca_file   = "{{ .Values.certificates.caCrtPath }}"  # Reference CA certificate
+    }
+
+    # API address
+    api_addr = "https://vault.minikube.local:8200"  # ✅ Match Ingress hostname  # Set to the correct external IP
+
+    # Cluster address (for Raft)
+    cluster_addr = "https://vault-0.vault-internal:8201"  # Internal DNS for Raft  
+    
+    ui = true
+    disable_mlock = true
+=======
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-config
+  namespace: vault-deployment
+data:
+  vault.hcl: |
+    # Storage backend using Raft
+    storage "raft" {
+      path    = "{{ .Values.storage.path }}"
+      node_id = "vault-0"
+    }
+
+    # Listener configuration for Vault
+    listener "tcp" {
+      address         = "0.0.0.0:8200"  
+      tls_disable     = 0
+      tls_cert_file   = "{{ .Values.certificates.tlsCrtPath }}"
+      tls_key_file    = "{{ .Values.certificates.tlsKeyPath }}"
+      tls_ca_file   = "{{ .Values.certificates.caCrtPath }}"  # Reference CA certificate
+    }
+
+    # API address
+    api_addr = "https://vault.minikube.local:8200"  # ✅ Match Ingress hostname  # Set to the correct external IP
+
+    # Cluster address (for Raft)
+    cluster_addr = "https://vault-0.vault-internal:8201"  # Internal DNS for Raft  
+    
+    ui = true
+    disable_mlock = true
+>>>>>>> upstream/main:helm/templates/vault-config.yaml

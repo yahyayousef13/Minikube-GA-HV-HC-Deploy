@@ -11,7 +11,7 @@ jobs:
     runs-on: self-hosted  # Use self hosted runner for the GitHub Actions workflow    
 
     env:
-      JFROG_REGISTRY: "trial086vpt.jfrog.io"
+      JFROG_REGISTRY: "triald4lybb.jfrog.io"
       JFROG_REPO: "vault-repo"
       IMAGE_NAME: "vault-server"
       BASE_VERSION: "1.0"

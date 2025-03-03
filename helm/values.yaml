@@ -3,7 +3,7 @@ replicaCount: 1
 
 # Image configuration for the Vault server
 image:
-  repository: trial4w4crx.jfrog.io/vault-repo/vault-server
+  repository: triald4lybb.jfrog.io/vault-repo/vault-server
   tag: "latest"
   pullPolicy: IfNotPresent
 
@@ -58,3 +58,13 @@ volumes:
   - name: vault-data
     persistentVolumeClaim:
       claimName: vault-pvc # Ensure PVC exists in your deployment
+
+extraVolumes:
+  - name: vault-ssl-certs
+    secret:
+      secretName: vault-ssl-certs
+
+extraVolumeMounts:
+  - name: vault-ssl-certs
+    mountPath: /vault/certs
+    readOnly: true
