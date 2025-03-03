@@ -11,7 +11,7 @@ jobs:
     runs-on: self-hosted  # Use self hosted runner for the GitHub Actions workflow    
 
     env:
-      JFROG_REGISTRY: "triald4lybb.jfrog.io"
+      JFROG_REGISTRY: "trial086vpt.jfrog.io"
       JFROG_REPO: "vault-repo"
       IMAGE_NAME: "vault-server"
       BASE_VERSION: "1.0"
@@ -169,7 +169,7 @@ jobs:
           kubectl port-forward svc/vault --namespace=${{ env.K8S_NAMESPACE }} 8200:8200 &
           FORWARD_PID=$!
           sleep 5  
-          curl -k http://localhost:8200/v1/sys/health || echo "Vault is not reachable!"
+          curl -k https://localhost:8200/v1/sys/health || echo "Vault is not reachable!"
           kill $FORWARD_PID
 
           
