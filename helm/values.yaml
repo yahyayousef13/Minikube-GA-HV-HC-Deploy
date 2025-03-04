@@ -9,7 +9,7 @@ image:
 
 # Service configuration for accessing Vault
 service:
-  type: ClusterIP # Change to LoadBalancer for cloud environments
+  type: NodePort # Change to LoadBalancer for cloud environments
   port: 8200      # The port exposed by the servicel
   nodePort: 32000  # Set a fixed NodePort
 
