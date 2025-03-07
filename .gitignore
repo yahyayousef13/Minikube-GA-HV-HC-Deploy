@@ -1,14 +1,6 @@
 cicd(old).yml
 dir data
 depcopy.yml
-<<<<<<< HEAD
-<<<<<<< HEAD
-helm\certs\vault-ca
-=======
-# Ignore the vault-ca directory
-helm/certs/vault-ca/
->>>>>>> upstream/main
-=======
 # Ignore Terraform state files
 terraform/.terraform/
 terraform/terraform.tfstate
