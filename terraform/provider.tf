@@ -1,3 +1,4 @@
+
 terraform {
   required_providers {
     docker = {
@@ -15,13 +16,21 @@ terraform {
   }
 }
 
-provider "docker" {}
+provider "docker" {
+  host = "unix:///var/run/docker.sock"
+}
 
 provider "kubernetes" {
-  config_path = "~/.kube/config"  # Adjust this path if needed
+  config_path = "/mnt/c/Users/ashis/.kube/config"
 }
 
 provider "github" {
   token = var.github_token
   owner = var.github_owner
+}
+
+provider "helm" {
+  kubernetes {
+    config_path = "~/.kube/config"
+  }
 }
