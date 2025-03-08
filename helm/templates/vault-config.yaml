@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: vault-config
-  namespace: vault-deployment
+
 data:
   vault.hcl: |
     # Storage backend using Raft
@@ -21,10 +21,12 @@ data:
     }
 
     # API address
-    api_addr = "https://vault.minikube.local:8200"  # ✅ Match Ingress hostname  # Set to the correct external IP
-
+    #api_addr = "https://vault.minikube.local:8200"  # ✅ Match Ingress hostname  # Set to the correct external IP
     # Cluster address (for Raft)
-    cluster_addr = "https://vault-0.vault-internal:8201"  # Internal DNS for Raft  
-    
+    #cluster_addr = "https://vault-0.vault-internal:8201"  # Internal DNS for Raft  
+      # Update addresses to use service DNS names
+
+    addr: "https://vault.vault-deployment.svc.cluster.local:8200"
+    clusterAddr: "https://vault.vault-deployment.svc.cluster.local:8201"
     ui = true
     disable_mlock = true

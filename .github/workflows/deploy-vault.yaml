@@ -155,7 +155,7 @@ jobs:
           kubectl get all --namespace=${{ env.K8S_NAMESPACE }}
           kubectl describe deployment/${{ env.K8S_DEPLOYMENT_NAME }} --namespace=${{ env.K8S_NAMESPACE }}
           kubectl logs -l app.kubernetes.io/name=vault --namespace=${{ env.K8S_NAMESPACE }} --tail=50
-
+      
       # Step 16: Verify Helm Chart Deployment
       - name: Verify Helm Chart Deployment
         run: |
