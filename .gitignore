@@ -1,6 +1,7 @@
 cicd(old).yml
 dir data
 depcopy.yml
+CD-CD.yaml
 # Ignore Terraform state files
 terraform/.terraform/
 terraform/terraform.tfstate
