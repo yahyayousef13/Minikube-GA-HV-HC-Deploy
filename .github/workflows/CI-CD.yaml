@@ -108,7 +108,7 @@ jobs:
 
       - name: Upload Trivy Report
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
             name: trivy-report
             path: trivy-report.txt

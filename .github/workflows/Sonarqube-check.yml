@@ -1,9 +1,10 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
+  workflow_dispatch:  # Add this line to enable manual triggering
 
 
 jobs:
