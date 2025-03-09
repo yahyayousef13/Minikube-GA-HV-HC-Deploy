@@ -8,5 +8,4 @@ terraform/terraform.tfstate.backup
 terraform/.terraform.lock.hcl
 terraform/terraform.tfvars
 monitoring/
-
 .github\workflows\CD-CD.yaml
