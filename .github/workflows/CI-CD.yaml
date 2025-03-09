@@ -78,19 +78,41 @@ jobs:
           echo "Pushing Docker image to JFrog Artifactory..."
           docker push ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
+
+  vulnerability_check:
+    runs-on: self-hosted
+    needs: push
+    env:
+        JFROG_REGISTRY: "triald4lybb.jfrog.io"
+        JFROG_REPO: "vault-repo"
+        IMAGE_NAME: "vault-server"
+        IMAGE_TAG: "${{ github.run_number }}-$(date +'%Y%m%d')"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        # Add Trivy or other vulnerability scanning steps here
       - name: Pull and Verify Docker Image
         run: |
           echo "Pulling Docker image from Artifactory for verification..."
           docker pull ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-  vulnerability_check:
-    runs-on: self-hosted
-    needs: push
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Run Trivy Vulnerability Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+            image-ref: ${{ env.JFROG_REGISTRY }}/${{ env.JFROG_REPO }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            format: 'table'
+            exit-code: '1'
+            ignore-unfixed: true
+            vuln-type: 'os,library'
+            severity: 'HIGH,CRITICAL'
 
-      # Add Trivy or other vulnerability scanning steps here
+      - name: Upload Trivy Report
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+            name: trivy-report
+            path: trivy-report.txt
+
 
   deploy:
     runs-on: self-hosted
@@ -178,6 +200,10 @@ jobs:
   cleanup:
     runs-on: self-hosted
     needs: deploy
+    env:
+        JFROG_REGISTRY: "triald4lybb.jfrog.io"
+        JFROG_REPO: "vault-repo"
+        IMAGE_NAME: "vault-server"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -187,3 +213,4 @@ jobs:
           echo "Deleting older images from JFrog..."
           curl -u "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" \
             -X DELETE "https://${{ env.JFROG_REGISTRY }}/artifactory/api/docker/${{ env.JFROG_REPO }}/v2/${{ env.IMAGE_NAME }}/tags?olderThan=3d"
+ 
