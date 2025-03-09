@@ -1,4 +1,4 @@
-name: Build
+name: Sonarqube Code scan for GitHub
 
 on:
   #push:
@@ -8,8 +8,8 @@ on:
 
 
 jobs:
-  build:
-    name: Build
+  code_Scan:
+    name: Code Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
