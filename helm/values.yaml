@@ -9,15 +9,13 @@ image:
 
 # Service configuration for accessing Vault
 service:
-  type: NodePort # Change to LoadBalancer for cloud environments
-  port: 8200      # The port exposed by the servicel
-  nodePort: 32000  # Set a fixed NodePort
+  type: ClusterIP
+  port: 8200
+  #nodePort: 32000  # Ensure this is set to a valid NodePort range (30000-32767)
 
-
-# Vault addresses for internal and external access
 vault:
-  addr: "https://vault.minikube.local:8200"  # ✅ Match Ingress  # Updated to match the certificate SAN
-  externalAddr: "https://10.244.0.23:8200"
+  addr: "https://vault.minikube.local"  # Replace <minikube-ip> with the actual IP
+  externalAddr: "https://vault.minikube.local"
   clusterAddr: "https://vault-0.vault-internal:8201"
 
 
@@ -30,7 +28,6 @@ storage:
 certificates:
   tlsCrtPath: "/vault/certs/tls.crt"
   tlsKeyPath: "/vault/certs/tls.key"
-  caCrtPath: "/vault/certs/ca.crt"
 
 # Security context for the Vault server
 server:
