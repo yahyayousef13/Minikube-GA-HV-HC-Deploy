@@ -11,3 +11,4 @@ terraform/terraform.tfvars
 monitoring/
 .github\workflows\CD-CD.yaml
 vault-ca-secret.yaml
+vault-namespace.yaml
