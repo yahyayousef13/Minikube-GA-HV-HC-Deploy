@@ -32,8 +32,6 @@ spec:
         - containerPort: {{ .Values.service.port }}
         
         env:
-        - name: VAULT_SKIP_VERIFY
-          value: "true"
         - name: VAULT_ADDR
           value: "{{ .Values.vault.addr }}"  
         - name: VAULT_EXTERNAL_ADDR

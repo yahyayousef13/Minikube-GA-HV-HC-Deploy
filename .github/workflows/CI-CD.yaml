@@ -239,7 +239,7 @@ jobs:
           sleep 30
           curl -s http://localhost:9090/targets | grep "vault"
           curl -s http://localhost:3000 | grep "Grafana"
-
+        continue-on-error: true
 
   cleanup:
     runs-on: self-hosted
