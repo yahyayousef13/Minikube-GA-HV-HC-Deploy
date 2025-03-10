@@ -36,3 +36,7 @@ data:
       secret_shares    = 3
       secret_threshold = 2
     }
+
+    telemetry {
+      prometheus_retention_time = "24h"
+    }

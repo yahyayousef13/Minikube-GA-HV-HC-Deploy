@@ -208,6 +208,37 @@ jobs:
             echo "No existing Vault deployment to roll back."
           fi
 
+          - name: Install Prometheus
+          run: |
+            echo "Installing Prometheus..."
+            helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+            helm repo update
+            helm upgrade --install prometheus prometheus-community/prometheus --namespace monitoring --create-namespace
+  
+      - name: Install Grafana
+        run: |
+          echo "Installing Grafana..."
+          helm repo add grafana https://grafana.github.io/helm-charts
+          helm repo update
+          helm upgrade --install grafana grafana/grafana --namespace monitoring
+
+      - name: Configure Prometheus to Scrape Vault
+        run: |
+          echo "Configuring Prometheus to scrape Vault metrics..."
+          kubectl get configmap prometheus-server -n monitoring -o yaml | \
+          sed '/scrape_configs:/a\ \ \ \ - job_name: "vault"\n\ \ \ \ \ \ static_configs:\n\ \ \ \ \ \ \ \ - targets: ["vault.vault-deployment.svc.cluster.local:8200"]' | \
+          kubectl apply -f -
+
+      - name: Verify Monitoring Setup
+        run: |
+          echo "Verifying Prometheus and Grafana setup..."
+          kubectl get pods -n monitoring
+          kubectl port-forward svc/prometheus-server -n monitoring 9090:80 &
+          kubectl port-forward svc/grafana -n monitoring 3000:80 &
+          sleep 10
+          curl -s http://localhost:9090/targets | grep "vault"
+          curl -s http://localhost:3000 | grep "Grafana"
+
   cleanup:
     runs-on: self-hosted
     needs: deploy
