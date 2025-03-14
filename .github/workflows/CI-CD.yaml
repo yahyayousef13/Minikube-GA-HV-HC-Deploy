@@ -256,9 +256,6 @@ jobs:
           echo "Deleting older images from JFrog..."
           curl -u "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" \
             -X DELETE "https://${{ env.JFROG_REGISTRY }}/artifactory/api/docker/${{ env.JFROG_REPO }}/v2/${{ env.IMAGE_NAME }}/tags?olderThan=3d"
-<<<<<<< HEAD
- 
-=======
 
 
 
@@ -275,4 +272,3 @@ jobs:
         if: failure()
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment failed for run #${{ github.run_number }} on branch ${{ github.ref_name }}. Please check the logs for more details."}' ${{ secrets.SLACK_WEBHOOK_URL }}
->>>>>>> upstream/main
