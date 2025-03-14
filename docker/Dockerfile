@@ -5,12 +5,9 @@ FROM hashicorp/vault:1.13.3
 WORKDIR /vault
 
 # Create necessary directories
-RUN mkdir -p /vault/config /vault/data /vault/certs \
+RUN mkdir -p /vault/data /vault/certs \
     && chmod -R 750 /vault \
     && chown -R vault:vault /vault
-
-# Copy Vault configuration file
-COPY docker/config.hcl /vault/config/config.hcl
 
 # Ensure Vault is running with necessary permissions
 USER vault
@@ -22,6 +19,10 @@ EXPOSE 8200
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s \
   CMD vault status || exit 1
 
-# Start Vault with the configuration file
+# Start Vault without a local configuration file
 ENTRYPOINT ["vault"]
+<<<<<<< HEAD
 CMD ["server", "-config=/vault/config/config.hcl"]
+=======
+CMD ["server"]
+>>>>>>> upstream/main

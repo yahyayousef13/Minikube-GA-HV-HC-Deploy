@@ -1,10 +1,17 @@
-cicd(old).yml
+deploy-vault.yaml
 dir data
 depcopy.yml
+Add-changes.yaml
 # Ignore Terraform state files
 terraform/.terraform/
 terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
 terraform/.terraform.lock.hcl
 terraform/terraform.tfvars
+<<<<<<< HEAD
+>>>>>>> upstream/main
+=======
+.github\workflows\CD-CD.yaml
+vault-ca-secret.yaml
+vault-namespace.yaml
 >>>>>>> upstream/main

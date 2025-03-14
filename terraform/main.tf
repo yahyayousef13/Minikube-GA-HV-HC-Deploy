@@ -6,33 +6,6 @@ provider "null" {}
 resource "null_resource" "init_minikube" {
   provisioner "local-exec" {
     command = <<EOT
-      wsl bash -c "  
-        MINIKUBE_STATUS=$(minikube status --format=\"{.Host}\")
-        if [[ \"$MINIKUBE_STATUS\" != \"Running\" ]]; then
-          echo \"Starting Minikube...\"
-          if minikube start --driver=docker; then
-            echo \"Minikube started successfully.\"
-            mkdir -p ~/.kube
-            [ -f \"/mnt/c/Users/ashis/.kube/config\" ] && cp /mnt/c/Users/ashis/.kube/config ~/.kube/config
-            mkdir -p ~/.minikube
-            cp -r /mnt/c/Users/ashis/.minikube/* ~/.minikube/
-            kubectl get pods --all-namespaces
-          else
-            echo \"Failed to start Minikube.\"
-            exit 1
-          fi
-        else
-          echo \"Minikube is already running. Skipping start...\"
-        fi"
-    EOT
-  }
-
-}
-provider "null" {}
-
-resource "null_resource" "start_minikube" {
-  provisioner "local-exec" {
-    command = <<EOT
       export KUBECONFIG=$HOME/.kube/config
       minikube start --driver=docker
       kubectl cluster-info

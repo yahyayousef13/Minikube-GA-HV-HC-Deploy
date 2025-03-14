@@ -2,27 +2,27 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: vault-ingress
-  namespace: vault-deployment                      # Ensure the correct namespace
+  namespace: vault-deployment
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: "/"            # Ensures that the path is redirected to root
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"         # Enforces HTTP to HTTPS redirection
-    nginx.ingress.kubernetes.io/secure-backends: "true"      # Secures communication between Ingress and Vault backend
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"  
-    nginx.ingress.kubernetes.io/proxy-ssl-secret: "vault-deployment/vault-ssl-cert"   
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/proxy-ssl-secret: "vault-deployment/vault-ssl-cert"
 spec:
-  ingressClassName: nginx                                # Explicitly define the Ingress class
+  ingressClassName: nginx
   rules:
-  - host: vault.minikube.local                                      # Replace with your actual domain if needed (ensure it resolves to Minikube's IP)
+  - host: vault.minikube.local
     http:
       paths:
-      - path: /                                            # The root path for Vault
+      - path: /
         pathType: Prefix
         backend:
           service:
-            name: vault                                    # Correct service name
+            name: vault
             port:
-              number: 8200                                  # Vault service port (ensure it matches the service)
+              number: 8200
   tls:
   - hosts:
-    - vault.minikube.local                                          # Replace with your actual domain if needed
-    secretName: vault-ssl-cert                             # Reference to the secret containing your TLS certs
+    - vault.minikube.local
+    secretName: vault-ssl-cert
