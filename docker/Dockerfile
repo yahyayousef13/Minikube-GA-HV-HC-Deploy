@@ -21,8 +21,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=10s \
 
 # Start Vault without a local configuration file
 ENTRYPOINT ["vault"]
-<<<<<<< HEAD
-CMD ["server", "-config=/vault/config/config.hcl"]
-=======
 CMD ["server"]
->>>>>>> upstream/main
