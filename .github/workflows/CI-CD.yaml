@@ -58,7 +58,7 @@ jobs:
     runs-on: self-hosted
     needs: build
     env:
-      JFROG_REGISTRY: "triald4lybb.jfrog.io"
+      JFROG_REGISTRY: "triale22jsa.jfrog.io"
       JFROG_REPO: "vault-repo"
       IMAGE_NAME: "vault-server"
       IMAGE_TAG: "${{ github.run_number }}-$(date +'%Y%m%d')"
@@ -83,7 +83,7 @@ jobs:
     runs-on: self-hosted
     needs: push
     env:
-      JFROG_REGISTRY: "triald4lybb.jfrog.io"
+      JFROG_REGISTRY: "triale22jsa.jfrog.io"
       JFROG_REPO: "vault-repo"
       IMAGE_NAME: "vault-server"
     steps:
@@ -129,7 +129,7 @@ jobs:
     runs-on: self-hosted
     needs: vulnerability_check
     env:
-      JFROG_REGISTRY: "triald4lybb.jfrog.io"
+      JFROG_REGISTRY: "triale22jsa.jfrog.io"
       JFROG_REPO: "vault-repo"
       IMAGE_NAME: "vault-server"
       IMAGE_TAG: "${{ github.run_number }}-$(date +'%Y%m%d')"
@@ -257,4 +257,19 @@ jobs:
           echo "Deleting older images from JFrog..."
           curl -u "${{ secrets.JFROG_USERNAME }}:${{ secrets.JFROG_PASSWORD }}" \
             -X DELETE "https://${{ env.JFROG_REGISTRY }}/artifactory/api/docker/${{ env.JFROG_REPO }}/v2/${{ env.IMAGE_NAME }}/tags?olderThan=3d"
- 
+
+
+
+  notify:
+    runs-on: self-hosted
+    needs: [validate, build, push, vulnerability_check, deploy, monitoring, cleanup]
+    steps:
+      - name: Send Slack Notification
+        if: success()
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment succeeded for run #${{ github.run_number }} on branch ${{ github.ref_name }}."}' ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Send Slack Notification on Failure
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Deployment failed for run #${{ github.run_number }} on branch ${{ github.ref_name }}. Please check the logs for more details."}' ${{ secrets.SLACK_WEBHOOK_URL }}

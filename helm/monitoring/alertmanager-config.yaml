@@ -9,5 +9,5 @@ route:
 receivers:
   - name: 'slack-notifications'
     slack_configs:
-      - api_url: 'https://hooks.slack.com/services/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'
+      - api_url: 'https://hooks.slack.com/services/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'
         channel: '#monitoring-alerts'
