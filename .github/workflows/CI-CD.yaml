@@ -4,6 +4,7 @@ on:
     branches:
       - main  # Trigger deployment on push to the main branch
 
+
 jobs:
   validate:
     runs-on: self-hosted
