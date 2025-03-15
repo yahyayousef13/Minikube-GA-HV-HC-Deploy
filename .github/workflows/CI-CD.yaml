@@ -24,7 +24,7 @@ jobs:
     runs-on: self-hosted
     needs: validate
     env:
-      JFROG_REGISTRY: "triald4lybb.jfrog.io"
+      JFROG_REGISTRY: "triale22jsa.jfrog.io"
       JFROG_REPO: "vault-repo"
       IMAGE_NAME: "vault-server"
       BASE_VERSION: "1.0"
