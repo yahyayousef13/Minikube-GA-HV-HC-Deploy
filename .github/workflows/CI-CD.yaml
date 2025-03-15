@@ -219,12 +219,20 @@ jobs:
           helm repo update
           helm upgrade --install prometheus prometheus-community/prometheus --namespace monitoring --create-namespace -f ./helm/monitoring/prometheus-values.yaml
 
+      - name: Get Latest Grafana Version
+        id: grafana_version
+        run: |
+          echo "Fetching latest Grafana version..."
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/grafana/helm-charts/releases/latest | jq -r '.tag_name')
+          echo "Latest Grafana version is $LATEST_VERSION"
+          echo "version=$LATEST_VERSION" >> $GITHUB_ENV
+
       - name: Install Grafana
         run: |
           echo "Installing Grafana..."
           helm repo add grafana https://grafana.github.io/helm-charts
           helm repo update
-          helm upgrade --install grafana grafana/grafana --namespace monitoring -f ./helm/monitoring/grafana-values.yaml
+          helm upgrade --install grafana grafana/grafana --namespace monitoring -f ./helm/monitoring/grafana-values.yaml --version ${{ env.version }}
 
       - name: Verify Monitoring Setup
         run: |
@@ -237,6 +245,7 @@ jobs:
           curl -s http://localhost:9090/targets | grep "vault"
           curl -s http://localhost:3000 | grep "Grafana"
         continue-on-error: true
+
 
   cleanup:
     runs-on: self-hosted
