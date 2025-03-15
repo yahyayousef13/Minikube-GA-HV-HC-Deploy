@@ -217,36 +217,33 @@ jobs:
           echo "Installing Prometheus..."
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo update
-          helm upgrade --install prometheus prometheus-community/prometheus --namespace monitoring --create-namespace -f ./helm/monitoring/prometheus-values.yaml
-
-      - name: Get Latest Grafana Version
-        id: grafana_version
-        run: |
-          echo "Fetching latest Grafana version..."
-          LATEST_VERSION=$(curl -s https://api.github.com/repos/grafana/helm-charts/releases/latest | jq -r '.tag_name')
-          echo "Latest Grafana version is $LATEST_VERSION"
-          echo "version=$LATEST_VERSION" >> $GITHUB_ENV
+          helm upgrade --install prometheus prometheus-community/prometheus --namespace monitoring --create-namespace -f ./helm/monitoring/prometheus-values.yaml --version 14.0.0
 
       - name: Install Grafana
         run: |
           echo "Installing Grafana..."
           helm repo add grafana https://grafana.github.io/helm-charts
           helm repo update
-          helm upgrade --install grafana grafana/grafana --namespace monitoring -f ./helm/monitoring/grafana-values.yaml --version ${{ env.version }}
+          helm upgrade --install grafana grafana/grafana --namespace monitoring -f ./helm/monitoring/grafana-values.yaml --version 8.10.3
 
       - name: Verify Monitoring Setup
         run: |
           echo "Verifying Prometheus and Grafana setup..."
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=prometheus,app.kubernetes.io/component=server -n monitoring --timeout=120s
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=grafana -n monitoring --timeout=120s
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=prometheus,app.kubernetes.io/component=server -n monitoring --timeout=180s
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=grafana -n monitoring --timeout=180s
           kubectl port-forward svc/prometheus-server -n monitoring 9090:9090 &
           kubectl port-forward svc/grafana -n monitoring 3000:3000 &
           sleep 30
           curl -s http://localhost:9090/targets | grep "vault"
           curl -s http://localhost:3000 | grep "Grafana"
-        continue-on-error: true
+        continue-on-error: false
 
-
+      - name: Cleanup
+        if: always()
+        run: |
+          echo "Cleaning up resources..."
+          kubectl delete namespace monitoring --ignore-not-found
+          
   cleanup:
     runs-on: self-hosted
     needs: monitoring
