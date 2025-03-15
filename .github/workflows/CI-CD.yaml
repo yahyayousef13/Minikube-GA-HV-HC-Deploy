@@ -205,6 +205,7 @@ jobs:
             echo "No existing Vault deployment to roll back."
           fi
 
+
   monitoring:
     runs-on: self-hosted
     needs: deploy
@@ -242,12 +243,7 @@ jobs:
           curl -s http://localhost:3000 | grep "Grafana"
         continue-on-error: false
 
-      - name: Cleanup
-        if: always()
-        run: |
-          echo "Cleaning up resources..."
-          kubectl delete namespace monitoring --ignore-not-found
-          
+    
   cleanup:
     runs-on: self-hosted
     needs: monitoring
@@ -258,6 +254,12 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+    
+      - name: Cleanup
+        if: always()
+        run: |
+          echo "Cleaning up resources..."
+          kubectl delete namespace monitoring --ignore-not-found    
 
       - name: Delete Older Docker Images from JFrog
         run: |
