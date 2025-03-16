@@ -209,7 +209,7 @@ jobs:
 
   monitoring:
     runs-on: self-hosted
-    #needs: deploy
+    needs: deploy
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -263,7 +263,7 @@ jobs:
 
   notify:
     runs-on: self-hosted
-    needs: monitoring # [validate, build, push, vulnerability_check, deploy, monitoring, cleanup]
+    needs: [validate, build, push, vulnerability_check, deploy, monitoring, cleanup]
     steps:
       - name: Send Slack Notification
         if: success()
