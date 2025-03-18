@@ -12,3 +12,14 @@ alerting:
   alertmanagers:
     - static_configs:
       - targets: ['alertmanager.monitoring.svc.cluster.local:9093']
+
+alertmanager:
+  service:
+    enabled: true
+    ports:
+      - name: web
+        port: 9093
+        targetPort: 9093
+      - name: web-alt
+        port: 9094
+        targetPort: 9094
