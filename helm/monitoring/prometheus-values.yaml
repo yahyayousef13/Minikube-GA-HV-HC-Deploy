@@ -23,3 +23,6 @@ alertmanager:
       - name: web-alt
         port: 9094
         targetPort: 9094
+
+rule_files:
+  - 'prometheus-rules.yaml'
