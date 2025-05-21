@@ -3,11 +3,7 @@ replicaCount: 1
 
 # Image configuration for the Vault server
 image:
-<<<<<<< HEAD
-  repository: trial7e2h1i.jfrog.io/vault-repo/vault-server
-=======
   repository: trialu4tbby.jfrog.io/vault-repo/vault-server
->>>>>>> upstream/main
   tag: "latest"
   pullPolicy: IfNotPresent
 
